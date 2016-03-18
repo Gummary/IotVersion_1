@@ -20,12 +20,21 @@ SocketService *SocketClass::GetService()
 
 qint64 SocketClass::ReadFromSocket(QByteArray &byte)
 {
+    if(socket_state_ == OPEN)
+    {
+        byte = my_socket_->readAll();
+        return byte.length();
+    }
 
+    return -1;
 }
 
-void SocketClass::WriteToSocket(QByteArray &byte)
+void SocketClass::WriteToSocket(const QByteArray &byte)
 {
-
+    if(socket_state_ == OPEN)
+    {
+        my_socket_->write(byte);
+    }
 }
 
 bool SocketClass::OpenSocket(MainWindow *mw)
@@ -37,12 +46,10 @@ bool SocketClass::OpenSocket(MainWindow *mw)
 
     //my_socket_->connectToHost("115.159.127.79", 23456);
     my_socket_->connectToHost("115.159.120.160", 9527);
-    qDebug() << "sock1";
     if(my_socket_->waitForConnected())
     {
         socket_state_ = OPEN;
         connect(my_socket_, SIGNAL(readyRead()), mw, SLOT(ReadSocket()));
-        //qDebug() << "sock2";
         return true;
     }
 

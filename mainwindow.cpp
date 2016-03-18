@@ -11,12 +11,9 @@ MainWindow::MainWindow(QWidget *parent) :
     my_serial_service_ = SerialClass::GetService();
     my_serial_service_->CloseCom();
     my_serial_service_->OpenCom();
-    qDebug() << "gg1";
 
     my_socket_service_ = SocketClass::GetService();
-    qDebug() << "gg2";
     my_socket_service_->CloseSocket();
-    qDebug() << "gg3";
     bool state = my_socket_service_->OpenSocket(this);
     qDebug() << state;
 
@@ -29,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     my_serial_service_->ReleaseSerial();
+    my_socket_service_->ReleaseSocket();
     delete ui;
 }
 
@@ -43,5 +41,5 @@ void MainWindow::ReadTimerOut()
 void MainWindow::ReadSocket()
 {
     QByteArray byte;
-
+    my_socket_service_->ReadFromSocket(byte);
 }

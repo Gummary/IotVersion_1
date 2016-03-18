@@ -30,7 +30,7 @@ private:
 
 private:
     qint64 ReadFromSocket(QByteArray &byte);
-    void WriteToSocket(QByteArray &byte);
+    void WriteToSocket(const QByteArray &byte);
     bool OpenSocket(MainWindow *mw);
     bool CloseSocket();
     void ReleaseSocket();    

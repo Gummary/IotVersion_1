@@ -31,7 +31,7 @@ public:
     
 private slots:
     void ReadTimerOut();
-    static void ReadSocket();
+    void ReadSocket();
 
 private:
     Ui::MainWindow *ui;
