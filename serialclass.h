@@ -3,20 +3,20 @@
 
 #include <QObject>
 #include <posix_qextserialport.h>
-#include "communicateservice.h"
+#include "serialservice.h"
 
-class SerialClass : public QObject, public CommunicateService
+class SerialClass : public QObject, public SerialService
 {
     Q_OBJECT
 public:
     explicit SerialClass(QObject *parent = 0);
-    static CommunicateService *GetService();
+    static SerialService *GetService();
 private://From SerialService
-    qint64 ReadFromService(QByteArray &byte);
-    void WriteToService(QByteArray &byte);
-    bool OpenSerivce();
-    bool CloseService();
-    void ReleaseService();
+    qint64 ReadFromSerial(QByteArray &byte);
+    void WriteToSerial(QByteArray &byte);
+    bool OpenCom();
+    bool CloseCom();
+    void ReleaseSerial();
     
 signals:
     
@@ -24,7 +24,7 @@ public slots:
 
 private:
     Posix_QextSerialPort *my_com_;
-    static CommunicateService *serial_service_;
+    static SerialService *serial_service_;
     enum{OPEN, CLOSE};
     int com_state_;
 };

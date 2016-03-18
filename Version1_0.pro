@@ -23,8 +23,9 @@ HEADERS  += mainwindow.h \
     qextserialbase.h \
     qextserialport.h \
     serialclass.h \
-    communicateservice.h \
-    socketclass.h
+    socketclass.h \
+    serialservice.h \
+    socketservice.h
 
 FORMS    += mainwindow.ui
 

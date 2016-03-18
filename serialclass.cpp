@@ -8,9 +8,9 @@ SerialClass::SerialClass(QObject *parent) :
 
 }
 
-CommunicateService* SerialClass::serial_service_(0);
+SerialService* SerialClass::serial_service_(0);
 
-CommunicateService *SerialClass::GetService()
+SerialService *SerialClass::GetService()
 {
     if(0 == serial_service_)
     {
@@ -19,7 +19,7 @@ CommunicateService *SerialClass::GetService()
     return serial_service_;
 }
 
-qint64 SerialClass::ReadFromService(QByteArray &byte)
+qint64 SerialClass::ReadFromSerial(QByteArray &byte)
 {
     if(my_com_&&OPEN == com_state_)
     {
@@ -29,7 +29,7 @@ qint64 SerialClass::ReadFromService(QByteArray &byte)
     return -1;
 }
 
-void SerialClass::WriteToService(QByteArray &byte)
+void SerialClass::WriteToSerial(QByteArray &byte)
 {
     if(my_com_&&OPEN == com_state_)
     {
@@ -40,11 +40,11 @@ void SerialClass::WriteToService(QByteArray &byte)
 
 
 
-bool SerialClass::OpenSerivce()
+bool SerialClass::OpenCom()
 {
     if(my_com_)
     {
-        CloseService();
+        CloseCom();
     }
     else
     {
@@ -64,7 +64,7 @@ bool SerialClass::OpenSerivce()
     return true;
 }
 
-bool SerialClass::CloseService()
+bool SerialClass::CloseCom()
 {
     if(my_com_&&CLOSE!=com_state_)
     {
@@ -75,11 +75,11 @@ bool SerialClass::CloseService()
     return com_state_;
 }
 
-void SerialClass::ReleaseService()
+void SerialClass::ReleaseSerial()
 {
     if(my_com_)
     {
-        CloseService();
+        CloseCom();
         delete my_com_;
         my_com_ = 0;
     }

@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <QByteArray>
 #include "posix_qextserialport.h"
-#include "communicateservice.h"
+#include "serialservice.h"
 #include "serialclass.h"
 
 #define READTIME 1000
@@ -31,7 +31,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QTimer *read_timer_;//周期性读取串口的缓冲区
-    CommunicateService *my_serial_service_;
+    SerialService *my_serial_service_;
 
 };
 

@@ -1,23 +1,22 @@
 #include "socketclass.h"
 
 SocketClass::SocketClass(QObject *parent) :
-    QObject(parent),
-    socket_service_(0)
+    QObject(parent)
 {
 }
 
 
-qint64 SocketClass::ReadFromService(QByteArray &byte)
+qint64 SocketClass::ReadFromSocket(QByteArray &byte)
 {
 
 }
 
-void SocketClass::WriteToService(QByteArray &byte)
+void SocketClass::WriteToSocket(QByteArray &byte)
 {
 
 }
 
-bool SocketClass::OpenSerivce()
+bool SocketClass::OpenSocket()
 {
     if(0 == my_socket_)
     {
@@ -28,22 +27,14 @@ bool SocketClass::OpenSerivce()
 
 }
 
-bool SocketClass::CloseService()
+bool SocketClass::CloseSocket()
 {
 
 }
 
-void SocketClass::ReleaseService()
+void SocketClass::ReleaseSocket()
 {
 
 }
 
-CommunicateService* SocketClass::GetService()
-{
-    if(!socket_service_)
-    {
-        socket_service_ = new SocketClass();
-    }
 
-    return socket_service_;
-}
