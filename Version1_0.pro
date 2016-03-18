@@ -16,7 +16,9 @@ SOURCES += main.cpp\
     qextserialbase.cpp \
     qextserialport.cpp \
     serialclass.cpp \
-    socketclass.cpp
+    socketclass.cpp \
+    moudle.cpp \
+    ledandmotor.cpp
 
 HEADERS  += mainwindow.h \
     posix_qextserialport.h \
@@ -25,7 +27,10 @@ HEADERS  += mainwindow.h \
     serialclass.h \
     socketclass.h \
     serialservice.h \
-    socketservice.h
+    socketservice.h \
+    abstracemoudle.h \
+    moudle.h \
+    ledandmotor.h
 
 FORMS    += mainwindow.ui
 
