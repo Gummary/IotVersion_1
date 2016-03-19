@@ -1,72 +1,136 @@
 #include "ledandmotor.h"
 
-LedAndMotor::LedAndMotor(QObject *parent) :
-    QObject(parent)
+LedAndMotor::LedAndMotor()
 {
 }
 
-
-void LedAndMotor::SetSerialService(SerialService *service)
-{
-    my_service_ = service;
-}
+QByteArray LedAndMotor::msg_("\x40\x06\x01\x06\x00\xFF", 6);
 
 void LedAndMotor::GetID(QByteArray &id)
 {
     id.append("0x06");
 }
 
-void LedAndMotor::HandleMsg(const QByteArry &byte)
+void LedAndMotor::HandleMsg(const QByteArray &byte)
 {
     Moudle::HandleMsg(byte);
 
-
-    if ((len == 0x07) && (msg[4]!= 0xaa))
+    int len;
+    len = byte[1];
+    //处理控制返回消息
+    if ((len == 0x07) && (byte[4]!= 0xaa))
     {
-        if ((char)((msg[5] & 0xff) & 0x80) == (char)0x80) {
+        //LED 1
+        if ((char)((byte[5] & 0xff) & 0x80) == (char)0x80) {
+            qDebug() << "OPEN LED1";
+        }
+
+        if ((char)((byte[5] & 0xff) & 0x80) == (char)0x00) {
+            qDebug() << "CLOSE LED1";
+        }
+        //LED 2
+        if ((char)((byte[5] & 0xff) & 0x40) == (char)0x40) {
 
         }
 
-        if ((char)((msg[5] & 0xff) & 0x80) == (char)0x00) {
+        if ((char)((byte[5] & 0xff) & 0x40) == (char)0x00) {
+
+        }
+        //LED 3
+        if ((char)((byte[5] & 0xff) & 0x20) == (char)0x20) {
 
         }
 
-        if ((char)((msg[5] & 0xff) & 0x40) == (char)0x40) {
+        if ((char)((byte[5] & 0xff) & 0x20) == (char)0x00) {
+
+        }
+        //LED 4
+        if ((char)((byte[5] & 0xff) & 0x10) == (char)0x10) {
 
         }
 
-        if ((char)((msg[5] & 0xff) & 0x40) == (char)0x00) {
+        if ((char)((byte[5] & 0xff) & 0x10) == (char)0x00) {
 
         }
 
-        if ((char)((msg[5] & 0xff) & 0x20) == (char)0x20) {
+
+        //电机正转
+        if ((char)((byte[5] & 0xff) & 0x08) == (char)0x08) {
 
         }
-
-        if ((char)((msg[5] & 0xff) & 0x20) == (char)0x00) {
-
-        }
-
-        if ((char)((msg[5] & 0xff) & 0x10) == (char)0x10) {
+        //反转
+        if ((char)((byte[5] & 0xff) & 0x04) == (char)0x04) {
 
         }
-
-        if ((char)((msg[5] & 0xff) & 0x10) == (char)0x00) {
-
-        }
-        if ((char)((msg[5] & 0xff) & 0x08) == (char)0x08) {
-
-        }
-
-        if ((char)((msg[5] & 0xff) & 0x04) == (char)0x04) {
-
-        }
-
-        if (((char)((msg[5] & 0xff) & 0x08) == (char)0x00) && ((char)((msg[5] & 0xff) & 0x04) == (char)0x00)) {
+        //STOP MOTOR
+        if (((char)((byte[5] & 0xff) & 0x08) == (char)0x00) && ((char)((byte[5] & 0xff) & 0x04) == (char)0x00)) {
 
         }
 
 
 
     }
+}
+
+
+void LedAndMotor::WriteToSerial(const QByteArray &byte)
+{
+    SerialService *serivce = Moudle::get_serial_service();
+    if(0!=serivce)
+    {
+        serivce->WriteToSerial(byte);
+    }
+}
+
+void LedAndMotor::SendMsg(qint8 &cmd)
+{
+    if (1 > cmd || 12 < cmd) {
+        return ;
+    }
+    switch(cmd) {
+        case 1:
+            msg_[4] = 0x01;
+            break;
+        case 2:
+            msg_[4] = 0x02;
+            break;
+        case 3:
+            msg_[4] = 0x03;
+            break;
+        case 4:
+            msg_[4] = 0x04;
+            break;
+        case 5:
+            msg_[4] = 0x05;
+            break;
+        case 6:
+            msg_[4] = 0x06;
+            break;
+        case 7:
+            msg_[4] = 0x07;
+            break;
+        case 8:
+            msg_[4] = 0x08;
+            break;
+        case 9:     //电机正转
+            msg_[4] = 0x0a;
+            break;
+        case 10:    //电机停止
+            msg_[4] = 0x0c;
+            break;
+        case 11:    //电机反转
+            msg_[4] = 0x0b;
+            break;
+        default:
+            break;
+    }
+
+    unsigned char var;
+    char *str;
+    str = msg_.data();
+    var = Moudle::Varify((unsigned char *)str, 5);
+    msg_[5] = var;
+
+    SerialService *service = Moudle::get_serial_service();
+    service->WriteToSerial(msg_);
 }

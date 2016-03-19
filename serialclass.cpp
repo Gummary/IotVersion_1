@@ -29,7 +29,7 @@ qint64 SerialClass::ReadFromSerial(QByteArray &byte)
     return -1;
 }
 
-void SerialClass::WriteToSerial(QByteArray &byte)
+void SerialClass::WriteToSerial(const QByteArray &byte)
 {
     if(my_com_&&OPEN == com_state_)
     {

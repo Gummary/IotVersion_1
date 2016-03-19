@@ -10,6 +10,8 @@
 #include "serialclass.h"
 #include "socketservice.h"
 #include "socketclass.h"
+#include "moudle.h"
+#include "ledandmotor.h"
 
 #define READTIME 1000
 
@@ -33,11 +35,18 @@ private slots:
     void ReadTimerOut();
     void ReadSocket();
 
+    void on_OpenLed1_clicked();
+
+    void on_CloseLed1_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTimer *read_timer_;//周期性读取串口的缓冲区
     SerialService *my_serial_service_;
     SocketService *my_socket_service_;
+
+private:
+    Moudle *led_moudle_;
 
 };
 

@@ -13,7 +13,7 @@ public:
     static SerialService *GetService();
 private://From SerialService
     qint64 ReadFromSerial(QByteArray &byte);
-    void WriteToSerial(QByteArray &byte);
+    void WriteToSerial(const QByteArray &byte);
     bool OpenCom();
     bool CloseCom();
     void ReleaseSerial();

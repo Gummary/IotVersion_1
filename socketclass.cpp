@@ -42,10 +42,10 @@ bool SocketClass::OpenSocket(MainWindow *mw)
     if(0 == my_socket_)
     {
         my_socket_ = new QTcpSocket();
-    }
-
+    }    
     //my_socket_->connectToHost("115.159.127.79", 23456);
     my_socket_->connectToHost("115.159.120.160", 9527);
+
     if(my_socket_->waitForConnected())
     {
         socket_state_ = OPEN;
