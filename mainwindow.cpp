@@ -11,14 +11,16 @@ MainWindow::MainWindow(QWidget *parent) :
     my_serial_service_ = SerialClass::GetService();
     my_serial_service_->CloseCom();
     my_serial_service_->OpenCom();
-/*
+
     my_socket_service_ = SocketClass::GetService();   
     my_socket_service_->CloseSocket();   
     bool state = my_socket_service_->OpenSocket(this);
     qDebug() << state;
-*/
+
     led_moudle_ = new LedAndMotor();
     led_moudle_->set_serial_service(my_serial_service_);
+
+
 
     read_timer_ = new QTimer();
     connect(read_timer_, SIGNAL(timeout()), this, SLOT(ReadTimerOut()));
@@ -38,8 +40,8 @@ void MainWindow::ReadTimerOut()
     //读取串口消息
     QByteArray byte;
     qint64 length_ = my_serial_service_->ReadFromSerial(byte);
-    qDebug() << length_;
-
+    QByteArray socket_msg = led_moudle_->GetJson();
+    my_socket_service_->WriteToSocket(socket_msg);
 }
 
 void MainWindow::ReadSocket()

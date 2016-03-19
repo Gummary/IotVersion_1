@@ -20,7 +20,7 @@ SocketService *SocketClass::GetService()
 
 qint64 SocketClass::ReadFromSocket(QByteArray &byte)
 {
-    if(socket_state_ == OPEN)
+    if(socket_state_ == OPEN&&my_socket_)
     {
         byte = my_socket_->readAll();
         return byte.length();
@@ -31,7 +31,7 @@ qint64 SocketClass::ReadFromSocket(QByteArray &byte)
 
 void SocketClass::WriteToSocket(const QByteArray &byte)
 {
-    if(socket_state_ == OPEN)
+    if(socket_state_ == OPEN&&my_socket_)
     {
         my_socket_->write(byte);
     }

@@ -13,7 +13,7 @@
 #include "moudle.h"
 #include "ledandmotor.h"
 
-#define READTIME 1000
+#define READTIME 100
 
 namespace Ui {
 class MainWindow;

@@ -2,6 +2,8 @@
 
 LedAndMotor::LedAndMotor()
 {
+    for(int i= 0;i<4;i++) led_status_[i] = false;
+    motor_status_ = 0;
 }
 
 QByteArray LedAndMotor::msg_("\x40\x06\x01\x06\x00\xFF", 6);
@@ -23,48 +25,50 @@ void LedAndMotor::HandleMsg(const QByteArray &byte)
         //LED 1
         if ((char)((byte[5] & 0xff) & 0x80) == (char)0x80) {
             qDebug() << "OPEN LED1";
+            led_status_[0] = true;
         }
 
         if ((char)((byte[5] & 0xff) & 0x80) == (char)0x00) {
             qDebug() << "CLOSE LED1";
+            led_status_[0] = false;
         }
         //LED 2
         if ((char)((byte[5] & 0xff) & 0x40) == (char)0x40) {
-
+            led_status_[1] = true;
         }
 
         if ((char)((byte[5] & 0xff) & 0x40) == (char)0x00) {
-
+            led_status_[1] = false;
         }
         //LED 3
         if ((char)((byte[5] & 0xff) & 0x20) == (char)0x20) {
-
+            led_status_[2] = true;
         }
 
         if ((char)((byte[5] & 0xff) & 0x20) == (char)0x00) {
-
+            led_status_[2] = false;
         }
         //LED 4
         if ((char)((byte[5] & 0xff) & 0x10) == (char)0x10) {
-
+            led_status_[3] = true;
         }
 
         if ((char)((byte[5] & 0xff) & 0x10) == (char)0x00) {
-
+            led_status_[3] = false;
         }
 
 
         //电机正转
         if ((char)((byte[5] & 0xff) & 0x08) == (char)0x08) {
-
+            motor_status_ = 1;
         }
         //反转
         if ((char)((byte[5] & 0xff) & 0x04) == (char)0x04) {
-
+            motor_status_ = -1;
         }
         //STOP MOTOR
         if (((char)((byte[5] & 0xff) & 0x08) == (char)0x00) && ((char)((byte[5] & 0xff) & 0x04) == (char)0x00)) {
-
+            motor_status_ = 0;
         }
 
 
@@ -133,4 +137,29 @@ void LedAndMotor::SendMsg(qint8 &cmd)
 
     SerialService *service = Moudle::get_serial_service();
     service->WriteToSerial(msg_);
+}
+
+
+QByteArray LedAndMotor::GetJson()
+{
+    using namespace std;
+    Json::Value root;
+    root["TYPE"] = "LEDAndMOTOR";
+    if(led_status_[0])  root["LED1"] = "1";
+    else                root["LED1"] = "0";
+    if(led_status_[1])  root["LED2"] = "1";
+    else                root["LED2"] = "0";
+    if(led_status_[2])  root["LED3"] = "1";
+    else                root["LED3"] = "0";
+    if(led_status_[3])  root["LED4"] = "1";
+    else                root["LED4"] = "0";
+
+    if(motor_status_ == 1)          root["MOTOR"] = "1";
+    else if(motor_status_ == -1)    root["MOTOR"] = "-1";
+    else                            root["MOTOR"] = "0";
+
+
+    std::string out = root.toStyledString();
+    const char* status = out.c_str();
+    return QByteArray((char*)status);
 }

@@ -22,6 +22,8 @@ public:
     virtual void GetID(QByteArray &id) = 0;
 
     virtual void SendMsg(qint8 &cmd) = 0;
+
+    virtual QByteArray GetJson() = 0;
 signals:
 
     

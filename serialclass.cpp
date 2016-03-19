@@ -53,13 +53,22 @@ bool SerialClass::OpenCom()
     }
 
     my_com_->open(QIODevice::ReadWrite);
-    my_com_->setBaudRate(BAUD115200);
-    my_com_->setDataBits(DATA_8);
-    my_com_->setParity(PAR_NONE);
-    my_com_->setStopBits(STOP_1);
-    my_com_->setFlowControl(FLOW_OFF);
-    my_com_->setTimeout(50);
-    com_state_ = OPEN;
+    if(my_com_->isOpen())
+    {
+        com_state_ = OPEN;
+        my_com_->setBaudRate(BAUD115200);
+        my_com_->setDataBits(DATA_8);
+        my_com_->setParity(PAR_NONE);
+        my_com_->setStopBits(STOP_1);
+        my_com_->setFlowControl(FLOW_OFF);
+        my_com_->setTimeout(50);
+    }
+    else
+    {
+        com_state_ = false;
+    }
+
+
 
     return true;
 }

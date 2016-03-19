@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <moudle.h>
 #include <serialservice.h>
+#include "json/json.h"
 
 
 
@@ -15,12 +16,6 @@ class LedAndMotor :public Moudle
 public:
     explicit LedAndMotor();
 
-    
-signals:
-    
-public slots:
-
-private:
     void WriteToSerial(const QByteArray &byte);
 
     void GetID(QByteArray &id);
@@ -29,8 +24,20 @@ private:
 
     void SendMsg(qint8 &cmd);
 
+    QByteArray GetJson();
+    
+signals:
+    
+public slots:
+
+private:
+
+
 private:    
     static QByteArray msg_;
+    bool led_status_[4];
+    int motor_status_;
+
     
 };
 
