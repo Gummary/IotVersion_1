@@ -14,11 +14,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     my_socket_service_ = SocketClass::GetService();   
     my_socket_service_->CloseSocket();   
-    bool state = my_socket_service_->OpenSocket(this);
-    qDebug() << state;
+    //bool state = my_socket_service_->OpenSocket(this);
+    //qDebug() << state;
 
     led_moudle_ = new LedAndMotor();
     led_moudle_->set_serial_service(my_serial_service_);
+    int time = READTIME;
+    led_moudle_->set_time_cycle(time);
 
 
 

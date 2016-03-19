@@ -1,12 +1,16 @@
 #include "moudle.h"
 
 Moudle::Moudle(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    count_(0)
 {
 }
 
+
+int Moudle::time_cycle_(100);
 void Moudle::HandleMsg(const QByteArray &)
 {
+    count_ = 0;
     /*
     if(0!=coor_)
     {
@@ -30,6 +34,21 @@ SerialService* Moudle::get_serial_service()
     return service_;
 }
 
+void Moudle::CheckStatus()
+{
+    if(count_>MOUDLEDEADLINE)
+    {
+        if(0!=coor_)
+        {
+            coor_->EmitDisconnected();
+        }
+    }
+    else
+    {
+        count_+=time_cycle_;
+    }
+}
+
 
 unsigned char Moudle::Varify (unsigned char  *date, unsigned short len )
 {
@@ -40,4 +59,9 @@ unsigned char Moudle::Varify (unsigned char  *date, unsigned short len )
         num+= date[i];
     }
     return num;
+}
+
+void Moudle::set_time_cycle(int &timecycle)
+{
+    time_cycle_ = timecycle;
 }

@@ -74,7 +74,9 @@ void SocketClass::ReleaseSocket()
 {
     if(my_socket_)
     {
+        qDebug() << "gg1";
         delete my_socket_;
+        qDebug() << "gg2";
     }
     my_socket_ = 0;
 }

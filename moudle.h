@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <abstracemoudle.h>
 #include <serialservice.h>
+#define MOUDLEDEADLINE 5000
 
 class Moudle : public QObject, public AbstractMoudle
 {
@@ -19,11 +20,15 @@ public:
 
     virtual void set_serial_service(SerialService *service);
 
+    virtual void CheckStatus();
+
     virtual void GetID(QByteArray &id) = 0;
 
     virtual void SendMsg(qint8 &cmd) = 0;
 
     virtual QByteArray GetJson() = 0;
+
+    virtual void set_time_cycle(int &timecycle);
 signals:
 
     
@@ -36,6 +41,8 @@ protected:
 private:
     SerialService *service_;
     Coordinator *coor_;
+    int count_;
+    static int time_cycle_;
     
 };
 

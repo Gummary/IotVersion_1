@@ -46,7 +46,7 @@ private:
     SocketService *my_socket_service_;
 
 private:
-    Moudle *led_moudle_;
+    AbstractMoudle *led_moudle_;
 
 };
 
