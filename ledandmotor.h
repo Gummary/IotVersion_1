@@ -1,7 +1,6 @@
 #ifndef LEDANDMOTOR_H
 #define LEDANDMOTOR_H
 
-#include <QObject>
 #include <QByteArray>
 #include <QDebug>
 #include <moudle.h>
@@ -12,7 +11,6 @@
 
 class LedAndMotor :public Moudle
 {
-    Q_OBJECT
 public:
     explicit LedAndMotor();
 

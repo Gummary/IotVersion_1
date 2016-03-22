@@ -70,10 +70,12 @@ void LedAndMotor::HandleMsg(const QByteArray &byte)
         if (((char)((byte[5] & 0xff) & 0x08) == (char)0x00) && ((char)((byte[5] & 0xff) & 0x04) == (char)0x00)) {
             motor_status_ = 0;
         }
-
-
-
     }
+
+    QByteArray json_msg = GetJson();
+    SocketService *service = get_socket_service();
+    service->WriteToSocket(json_msg);
+
 }
 
 
@@ -144,7 +146,7 @@ QByteArray LedAndMotor::GetJson()
 {
     using namespace std;
     Json::Value root;
-    root["TYPE"] = "LEDAndMOTOR";
+    root["ID"] = "2";
     if(led_status_[0])  root["LED1"] = "1";
     else                root["LED1"] = "0";
     if(led_status_[1])  root["LED2"] = "1";

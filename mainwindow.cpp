@@ -1,5 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "temperature.h"
+#include "ledandmotor.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,15 +15,19 @@ MainWindow::MainWindow(QWidget *parent) :
     my_serial_service_->CloseCom();
     my_serial_service_->OpenCom();
 
-    my_socket_service_ = SocketClass::GetService();   
-    my_socket_service_->CloseSocket();   
-    //bool state = my_socket_service_->OpenSocket(this);
-    //qDebug() << state;
-
+    my_socket_service_ = SocketClass::GetService();
+    my_socket_service_->CloseSocket();
+    bool state = my_socket_service_->OpenSocket(this);
+    int time = READTIME;
     led_moudle_ = new LedAndMotor();
     led_moudle_->set_serial_service(my_serial_service_);
-    int time = READTIME;
+    led_moudle_->set_socket_service(my_socket_service_);
     led_moudle_->set_time_cycle(time);
+
+    temp_moudle_ = new Temperature();
+    temp_moudle_->set_serial_service(my_serial_service_);
+    temp_moudle_->set_socket_service(my_socket_service_);
+    temp_moudle_->set_time_cycle(time);
 
 
 
@@ -42,8 +49,10 @@ void MainWindow::ReadTimerOut()
     //读取串口消息
     QByteArray byte;
     qint64 length_ = my_serial_service_->ReadFromSerial(byte);
-    QByteArray socket_msg = led_moudle_->GetJson();
-    my_socket_service_->WriteToSocket(socket_msg);
+    char *msg = byte.data();
+    if(msg[3] == 0x06) led_moudle_->HandleMsg(byte);
+    //QByteArray socket_msg = led_moudle_->GetJson();
+    //my_socket_service_->WriteToSocket(socket_msg);
 }
 
 void MainWindow::ReadSocket()

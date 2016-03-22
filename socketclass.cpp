@@ -1,8 +1,10 @@
 #include "socketclass.h"
+#include "mainwindow.h"
 
 SocketClass::SocketClass(QObject *parent):
     QObject(parent),
-    socket_state_(CLOSE)
+    socket_state_(CLOSE) ,
+    my_socket_(0)
 {
 }
 
@@ -42,10 +44,9 @@ bool SocketClass::OpenSocket(MainWindow *mw)
     if(0 == my_socket_)
     {
         my_socket_ = new QTcpSocket();
-    }    
-    //my_socket_->connectToHost("115.159.127.79", 23456);
-    my_socket_->connectToHost("115.159.120.160", 9527);
-
+    }
+    my_socket_->connectToHost("115.159.127.79", 23456);
+    //my_socket_->connectToHost("115.159.120.160", 9527);
     if(my_socket_->waitForConnected())
     {
         socket_state_ = OPEN;
@@ -66,17 +67,18 @@ bool SocketClass::CloseSocket()
         if(my_socket_->waitForDisconnected())
         {
             socket_state_ = CLOSE;
+            return true;
         }
     }
+
+    return false;
 }
 
 void SocketClass::ReleaseSocket()
 {
     if(my_socket_)
     {
-        qDebug() << "gg1";
         delete my_socket_;
-        qDebug() << "gg2";
     }
     my_socket_ = 0;
 }

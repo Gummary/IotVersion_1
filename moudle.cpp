@@ -26,12 +26,22 @@ void Moudle::set_coor(Coordinator  *coor)
 
 void Moudle::set_serial_service(SerialService *service)
 {
-    service_ = service;
+    serial_service_ = service;
+}
+
+void Moudle::set_socket_service(SocketService *service)
+{
+    socket_serivce_ = service;
 }
 
 SerialService* Moudle::get_serial_service()
 {
-    return service_;
+    return serial_service_;
+}
+
+SocketService* Moudle::get_socket_service()
+{
+    return socket_serivce_;
 }
 
 void Moudle::CheckStatus()

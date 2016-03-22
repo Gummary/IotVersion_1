@@ -5,12 +5,9 @@
 #include <QTcpSocket>
 #include <QDebug>
 #include <socketservice.h>
-#include <mainwindow.h>
-
-class MainWindow;
 
 
-class SocketClass :public QObject, public SocketService
+class SocketClass :public QObject, SocketService
 {
     Q_OBJECT
 public:

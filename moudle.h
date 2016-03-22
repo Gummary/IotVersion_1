@@ -4,8 +4,9 @@
 #include <QObject>
 #include <QByteArray>
 #include <QDebug>
-#include <abstracemoudle.h>
-#include <serialservice.h>
+
+class AbstractMoudle;
+
 #define MOUDLEDEADLINE 5000
 
 class Moudle : public QObject, public AbstractMoudle
@@ -19,6 +20,8 @@ public:
     virtual void set_coor(Coordinator *coor);
 
     virtual void set_serial_service(SerialService *service);
+
+    virtual void set_socket_service(SocketService *service);
 
     virtual void CheckStatus();
 
@@ -36,10 +39,12 @@ public slots:
 
 protected:
     virtual SerialService *get_serial_service();
+    virtual SocketService *get_socket_service();
 
     unsigned char Varify (unsigned char  *date, unsigned short len);
 private:
-    SerialService *service_;
+    SerialService *serial_service_;
+    SocketService *socket_serivce_;
     Coordinator *coor_;
     int count_;
     static int time_cycle_;

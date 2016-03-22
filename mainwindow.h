@@ -6,20 +6,23 @@
 #include <QDebug>
 #include <QByteArray>
 #include "posix_qextserialport.h"
+
+#include "abstracemoudle.h"
 #include "serialservice.h"
 #include "serialclass.h"
 #include "socketservice.h"
 #include "socketclass.h"
-#include "moudle.h"
-#include "ledandmotor.h"
+
+class Temperature;
+class LedAndMotor;
+
 
 #define READTIME 100
+
 
 namespace Ui {
 class MainWindow;
 }
-
-class SocketService;
 
 class MainWindow : public QMainWindow
 {
@@ -47,6 +50,7 @@ private:
 
 private:
     AbstractMoudle *led_moudle_;
+    AbstractMoudle *temp_moudle_;
 
 };
 

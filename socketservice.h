@@ -1,6 +1,5 @@
 #ifndef SOCKETSERVICE_H
 #define SOCKETSERVICE_H
-#include "mainwindow.h"
 
 class MainWindow;
 

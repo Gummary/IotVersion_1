@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     lib_json/json_reader.cpp \
     lib_json/json_value.cpp \
     lib_json/json_valueiterator.inl \
-    lib_json/json_writer.cpp
+    lib_json/json_writer.cpp \
+    temperature.cpp
 
 HEADERS  += mainwindow.h \
     posix_qextserialport.h \
@@ -45,7 +46,8 @@ HEADERS  += mainwindow.h \
     json/json.h \
     json/reader.h \
     json/value.h \
-    json/writer.h
+    json/writer.h \
+    temperature.h
 
 FORMS    += mainwindow.ui
 
