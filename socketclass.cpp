@@ -26,7 +26,6 @@ void SocketClass::ReadFromSocket()
     {
         QByteArray byte;
         byte = my_socket_->readAll();
-        qDebug()<<byte;
         emit SocketMsg(byte, byte.size());
     }
 
@@ -48,7 +47,7 @@ bool SocketClass::OpenSocket()
     }
     //my_socket_->connectToHost("115.159.127.79", 23456);
     my_socket_->connectToHost("192.168.134.18", 23456);
-    if(my_socket_->waitForConnected())
+    if(my_socket_->waitForConnected(1000))
     {
         socket_state_ = OPEN;
         connect(my_socket_, SIGNAL(readyRead()), this, SLOT(ReadFromSocket()));

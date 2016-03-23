@@ -10,6 +10,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    c = new Clock(ui->ClockWidget);
+    c->show();
+
 
     my_serial_service_ = SerialClass::GetService();
     my_serial_service_->CloseCom();
@@ -19,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     my_socket_service_->CloseSocket();
     bool state = my_socket_service_->OpenSocket();
     connect(my_socket_service_,SIGNAL(SocketMsg(QByteArray,qint64)), this, SLOT(ReadSocket(QByteArray,qint64)));
+
     int time = READTIME;
     led_moudle_ = new LedAndMotor();
     led_moudle_->set_serial_service(my_serial_service_);
@@ -57,7 +61,8 @@ void MainWindow::ReadTimerOut()
 
 void MainWindow::ReadSocket(QByteArray byte, qint64 length)
 {
-    qDebug() << byte << length;
+    qint8 msg = 0x01;
+    if(byte == "a") led_moudle_->SendMsg(msg);
 }
 
 void MainWindow::on_OpenLed1_clicked()

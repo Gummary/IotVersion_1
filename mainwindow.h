@@ -10,6 +10,7 @@
 #include "abstracemoudle.h"
 #include "serialclass.h"
 #include "socketclass.h"
+#include "clock.h"
 
 
 
@@ -48,6 +49,7 @@ private:
 private:
     AbstractMoudle *led_moudle_;
     AbstractMoudle *temp_moudle_;
+    Clock *c;
 
 };
 

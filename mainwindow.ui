@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="OpenLed1">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>30</y>
+      <x>450</x>
+      <y>20</y>
       <width>92</width>
       <height>27</height>
      </rect>
@@ -30,8 +30,8 @@
    <widget class="QPushButton" name="OpenMotor">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>230</y>
+      <x>440</x>
+      <y>250</y>
       <width>92</width>
       <height>27</height>
      </rect>
@@ -43,8 +43,8 @@
    <widget class="QPushButton" name="CloseMotor">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>230</y>
+      <x>590</x>
+      <y>250</y>
       <width>92</width>
       <height>27</height>
      </rect>
@@ -56,14 +56,24 @@
    <widget class="QPushButton" name="CloseLed1">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>30</y>
+      <x>590</x>
+      <y>20</y>
       <width>92</width>
       <height>27</height>
      </rect>
     </property>
     <property name="text">
      <string>CloseLed1</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="ClockWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>411</width>
+      <height>341</height>
+     </rect>
     </property>
    </widget>
   </widget>
