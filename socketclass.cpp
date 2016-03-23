@@ -3,15 +3,15 @@
 
 SocketClass::SocketClass(QObject *parent):
     QObject(parent),
-    socket_state_(CLOSE) ,
-    my_socket_(0)
+    my_socket_(0),
+    socket_state_(CLOSE)
 {
 }
 
+SocketClass* SocketClass::socket_service_(0);
 
-SocketService *SocketClass::socket_service_(0);
 
-SocketService *SocketClass::GetService()
+SocketClass *SocketClass::GetSocket()
 {
     if(0 == socket_service_)
     {
@@ -20,15 +20,16 @@ SocketService *SocketClass::GetService()
     return socket_service_;
 }
 
-qint64 SocketClass::ReadFromSocket(QByteArray &byte)
+void SocketClass::ReadFromSocket()
 {
     if(socket_state_ == OPEN&&my_socket_)
     {
+        QByteArray byte;
         byte = my_socket_->readAll();
-        return byte.length();
+        qDebug()<<byte;
+        emit SocketMsg(byte, byte.size());
     }
 
-    return -1;
 }
 
 void SocketClass::WriteToSocket(const QByteArray &byte)
@@ -39,19 +40,24 @@ void SocketClass::WriteToSocket(const QByteArray &byte)
     }
 }
 
-bool SocketClass::OpenSocket(MainWindow *mw)
+bool SocketClass::OpenSocket()
 {
     if(0 == my_socket_)
     {
         my_socket_ = new QTcpSocket();
     }
-    my_socket_->connectToHost("115.159.127.79", 23456);
-    //my_socket_->connectToHost("115.159.120.160", 9527);
+    //my_socket_->connectToHost("115.159.127.79", 23456);
+    my_socket_->connectToHost("192.168.134.18", 23456);
     if(my_socket_->waitForConnected())
     {
         socket_state_ = OPEN;
-        connect(my_socket_, SIGNAL(readyRead()), mw, SLOT(ReadSocket()));
+        connect(my_socket_, SIGNAL(readyRead()), this, SLOT(ReadFromSocket()));
+        qDebug()<<"GG";
         return true;
+    }
+    else
+    {
+        qDebug()<<"dd";
     }
 
     return false;

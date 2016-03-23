@@ -29,7 +29,7 @@ void Moudle::set_serial_service(SerialService *service)
     serial_service_ = service;
 }
 
-void Moudle::set_socket_service(SocketService *service)
+void Moudle::set_socket_service(SocketClass *service)
 {
     socket_serivce_ = service;
 }
@@ -39,7 +39,7 @@ SerialService* Moudle::get_serial_service()
     return serial_service_;
 }
 
-SocketService* Moudle::get_socket_service()
+SocketClass* Moudle::get_socket_service()
 {
     return socket_serivce_;
 }

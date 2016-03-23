@@ -8,13 +8,9 @@
 #include "posix_qextserialport.h"
 
 #include "abstracemoudle.h"
-#include "serialservice.h"
 #include "serialclass.h"
-#include "socketservice.h"
 #include "socketclass.h"
 
-class Temperature;
-class LedAndMotor;
 
 
 #define READTIME 100
@@ -36,7 +32,8 @@ public:
     
 private slots:
     void ReadTimerOut();
-    void ReadSocket();
+
+    void ReadSocket(QByteArray byte, qint64 length);
 
     void on_OpenLed1_clicked();
 
@@ -46,7 +43,7 @@ private:
     Ui::MainWindow *ui;
     QTimer *read_timer_;//周期性读取串口的缓冲区
     SerialService *my_serial_service_;
-    SocketService *my_socket_service_;
+    SocketClass *my_socket_service_;
 
 private:
     AbstractMoudle *led_moudle_;

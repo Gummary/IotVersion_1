@@ -73,7 +73,7 @@ void LedAndMotor::HandleMsg(const QByteArray &byte)
     }
 
     QByteArray json_msg = GetJson();
-    SocketService *service = get_socket_service();
+    SocketClass *service = get_socket_service();
     service->WriteToSocket(json_msg);
 
 }

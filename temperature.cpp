@@ -36,7 +36,7 @@ void Temperature::HandleMsg(const QByteArray &byte)
         light_ = light_ * 913;
     }
     QByteArray json_msg = GetJson();
-    SocketService* service = get_socket_service();
+    SocketClass* service = get_socket_service();
     service->WriteToSocket(json_msg);
 }
 
@@ -58,7 +58,7 @@ QByteArray Temperature::GetJson()
     temp = QString::number(humidity_);
     root["HUMBILITY"] = temp.toStdString();
 
-    temp = QString::number(light_,1);
+    temp = QString::number(light_,'f',1);
     root["LIGHT"] = temp.toStdString();
 
     std::string out = root.toStyledString();

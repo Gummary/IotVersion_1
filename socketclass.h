@@ -4,33 +4,37 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QDebug>
-#include <socketservice.h>
 
-
-class SocketClass :public QObject, SocketService
+class SocketClass :public QObject
 {
     Q_OBJECT
 public:
     explicit SocketClass(QObject *parent = 0);
 
-    static SocketService* GetService();
+    static SocketClass* GetSocket();
+
+    void WriteToSocket(const QByteArray &byte);
+
+    bool OpenSocket();
+
+    bool CloseSocket();
+
+    void ReleaseSocket();
     
 signals:
+    void SocketMsg(QByteArray byte, qint64 size);
     
 public slots:
+    void ReadFromSocket();
 
 private:
-    static SocketService *socket_service_;
+    static SocketClass *socket_service_;
     QTcpSocket *my_socket_;
     enum{OPEN, CLOSE};
     int socket_state_;
 
 private:
-    qint64 ReadFromSocket(QByteArray &byte);
-    void WriteToSocket(const QByteArray &byte);
-    bool OpenSocket(MainWindow *mw);
-    bool CloseSocket();
-    void ReleaseSocket();    
+
 };
 
 #endif // SOCKETCLASS_H
