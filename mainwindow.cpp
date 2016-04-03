@@ -47,6 +47,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(read_timer_, SIGNAL(timeout()), this, SLOT(ReadTimerOut()));
     read_timer_->start(READTIME);
 
+
+    pic_write_ = false;
+    camera_start_ = false;
+    camera_timer_ = new QTimer();
+    connect(camera_timer_,SIGNAL(timeout()), this, SLOT(UpdateCamera()));
+    deviceOpen();
+    deviceInit();
+
+
+
 }
 
 MainWindow::~MainWindow()
@@ -54,6 +64,28 @@ MainWindow::~MainWindow()
     my_serial_service_->ReleaseSerial();
     my_socket_service_->ReleaseSocket();
     delete ui;
+}
+
+void MainWindow::UpdateCamera()
+{
+    unsigned char image_buf[1536000+54];
+
+    frameRead(image_buf);
+    qDebug()<<"image_buf"<<*image_buf<<endl;
+    this->qimage_ = QImage::fromData(image_buf,800*480*4+54,NULL);
+
+    pixmap_ = QPixmap::fromImage(this->qimage_, 0);
+    ui->labelvideo->setPixmap(this->pixmap_);
+    qDebug()<<"start get vedio............................."<<endl;
+
+    if (pic_write_)
+    {
+        FILE* bmp_f = fopen("a.bmp", "w+");
+        fwrite(image_buf, 1, 800*480*4+54, bmp_f);  //debug by liaoxp 2013-11-28
+        fclose(bmp_f);
+        pic_write_ = false;
+        qDebug()<<"take photoshop............................."<<endl;
+    }
 }
 
 void MainWindow::ReadTimerOut()
@@ -103,12 +135,22 @@ void MainWindow::ReadSocket(QByteArray byte, qint64 length)
 
 void MainWindow::on_OPEN_clicked()
 {
-    qint8 msg = 1;
-    replay_moudle_->SendMsg(msg);
+    if(camera_start_)
+    {
+        camera_start_ = false;
+        camera_timer_->stop();
+    }
+    else
+    {
+        camera_start_ = true;
+        captureStart();
+        camera_timer_->start(300);
+
+    }
 }
 
 void MainWindow::on_CLOSE_clicked()
 {
-    qint8 msg = 2;
-    replay_moudle_->SendMsg(msg);
+    //qint8 msg = 2;
+    //replay_moudle_->SendMsg(msg);
 }

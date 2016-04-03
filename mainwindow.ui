@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>713</width>
-    <height>426</height>
+    <width>782</width>
+    <height>470</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,17 +17,17 @@
    <widget class="QWidget" name="ClockWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>10</y>
-      <width>351</width>
-      <height>341</height>
+      <x>560</x>
+      <y>210</y>
+      <width>291</width>
+      <height>181</height>
      </rect>
     </property>
    </widget>
    <widget class="QCalendarWidget" name="calendarWidget">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>560</x>
       <y>10</y>
       <width>291</width>
       <height>191</height>
@@ -37,8 +37,8 @@
    <widget class="QPushButton" name="OPEN">
     <property name="geometry">
      <rect>
-      <x>440</x>
-      <y>300</y>
+      <x>620</x>
+      <y>440</y>
       <width>92</width>
       <height>27</height>
      </rect>
@@ -50,14 +50,27 @@
    <widget class="QPushButton" name="CLOSE">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>300</y>
+      <x>610</x>
+      <y>400</y>
       <width>92</width>
       <height>27</height>
      </rect>
     </property>
     <property name="text">
      <string>Close</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelvideo">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>511</width>
+      <height>431</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Video</string>
     </property>
    </widget>
   </widget>

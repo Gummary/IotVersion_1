@@ -23,6 +23,7 @@ void Temperature::HandleMsg(const QByteArray &byte)
     unsigned char adc_value[2];
 
     Moudle::HandleMsg(byte);
+
     if (0x01 == byte[4])
     {
         temperature_ = (byte[5] << 8) + byte[6];//计算温度值公式
@@ -55,8 +56,8 @@ QByteArray Temperature::GetJson()
     temp = QString::number(temperature_);
     root["TEMPERATURE"] = temp.toStdString();
 
-    temp = QString::number(humidity_);
-    root["HUMBILITY"] = temp.toStdString();
+    //temp = QString::number(humidity_);
+    //root["HUMB"] = temp.toStdString();
 
     temp = QString::number(light_,'f',1);
     root["LIGHT"] = temp.toStdString();

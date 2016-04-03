@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     lib_json/json_writer.cpp \
     temperature.cpp \
     clock.cpp \
-    replays.cpp
+    replays.cpp \
+    camerainit.cpp
 
 HEADERS  += mainwindow.h \
     posix_qextserialport.h \
@@ -50,7 +51,8 @@ HEADERS  += mainwindow.h \
     json/writer.h \
     temperature.h \
     clock.h \
-    replays.h
+    replays.h \
+    camerainit.h
 
 FORMS    += mainwindow.ui
 
