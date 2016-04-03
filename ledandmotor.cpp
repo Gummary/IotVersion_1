@@ -24,12 +24,10 @@ void LedAndMotor::HandleMsg(const QByteArray &byte)
     {
         //LED 1
         if ((char)((byte[5] & 0xff) & 0x80) == (char)0x80) {
-            qDebug() << "OPEN LED1";
             led_status_[0] = true;
         }
 
         if ((char)((byte[5] & 0xff) & 0x80) == (char)0x00) {
-            qDebug() << "CLOSE LED1";
             led_status_[0] = false;
         }
         //LED 2
@@ -137,8 +135,7 @@ void LedAndMotor::SendMsg(qint8 &cmd)
     var = Moudle::Varify((unsigned char *)str, 5);
     msg_[5] = var;
 
-    SerialService *service = Moudle::get_serial_service();
-    service->WriteToSerial(msg_);
+    WriteToSerial(msg_);
 }
 
 

@@ -36,9 +36,9 @@ private slots:
 
     void ReadSocket(QByteArray byte, qint64 length);
 
-    void on_OpenLed1_clicked();
+    void on_OPEN_clicked();
 
-    void on_CloseLed1_clicked();
+    void on_CLOSE_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -49,6 +49,7 @@ private:
 private:
     AbstractMoudle *led_moudle_;
     AbstractMoudle *temp_moudle_;
+    AbstractMoudle *replay_moudle_;
     Clock *c;
 
 };

@@ -45,18 +45,18 @@ bool SocketClass::OpenSocket()
     {
         my_socket_ = new QTcpSocket();
     }
-    //my_socket_->connectToHost("115.159.127.79", 23456);
-    my_socket_->connectToHost("192.168.134.18", 23456);
+    my_socket_->connectToHost("115.159.127.79", 5678);
+    //my_socket_->connectToHost("192.168.134.18", 23456);
     if(my_socket_->waitForConnected(1000))
     {
         socket_state_ = OPEN;
         connect(my_socket_, SIGNAL(readyRead()), this, SLOT(ReadFromSocket()));
-        qDebug()<<"GG";
+        qDebug()<<"Socket connect success";
         return true;
     }
     else
     {
-        qDebug()<<"dd";
+        qDebug()<<"Socket connect failed";
     }
 
     return false;

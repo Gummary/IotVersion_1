@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "temperature.h"
 #include "ledandmotor.h"
+#include "replays.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -13,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     c = new Clock(ui->ClockWidget);
     c->show();
 
+    this->showFullScreen();
 
     my_serial_service_ = SerialClass::GetService();
     my_serial_service_->CloseCom();
@@ -33,6 +35,11 @@ MainWindow::MainWindow(QWidget *parent) :
     temp_moudle_->set_serial_service(my_serial_service_);
     temp_moudle_->set_socket_service(my_socket_service_);
     temp_moudle_->set_time_cycle(time);
+
+    replay_moudle_ = new Replays();
+    replay_moudle_->set_serial_service(my_serial_service_);
+    replay_moudle_->set_socket_service(my_socket_service_);
+    replay_moudle_->set_time_cycle(time);
 
 
 
@@ -57,22 +64,51 @@ void MainWindow::ReadTimerOut()
     char *msg = byte.data();
     if(msg[3] == 0x06) led_moudle_->HandleMsg(byte);
     if(msg[3] == 0x02) temp_moudle_->HandleMsg(byte);
+    if(msg[3] == 0x0A) replay_moudle_->HandleMsg(byte);
 }
 
 void MainWindow::ReadSocket(QByteArray byte, qint64 length)
 {
-    qint8 msg = 0x01;
-    if(byte == "a") led_moudle_->SendMsg(msg);
+    qDebug()<<byte;
+    qint8 msg = 0x00;
+
+
+    if(byte[0] == 0x0a)
+    {
+        char id = (char)byte[1];
+        if(id == 1)
+        {
+            if(byte[2] == 1)    msg = 1;
+            else                msg = 2;
+        }
+        else if(id == 2)
+        {
+            if(byte[2] == 1)    msg = 3;
+            else                msg = 4;
+        }
+        else if(id == 3)
+        {
+            if(byte[2] == 1)    msg = 5;
+            else                msg = 6;
+        }
+        else if(id == 4)
+        {
+            if(byte[2] == 1)    msg = 7;
+            else                msg = 8;
+        }
+    }
+    replay_moudle_->SendMsg(msg);
 }
 
-void MainWindow::on_OpenLed1_clicked()
+
+void MainWindow::on_OPEN_clicked()
 {
-    qint8 msg = 0x01;
-    led_moudle_->SendMsg(msg);
+    qint8 msg = 1;
+    replay_moudle_->SendMsg(msg);
 }
 
-void MainWindow::on_CloseLed1_clicked()
+void MainWindow::on_CLOSE_clicked()
 {
-    qint8 msg = 0x02;
-    led_moudle_->SendMsg(msg);
+    qint8 msg = 2;
+    replay_moudle_->SendMsg(msg);
 }
