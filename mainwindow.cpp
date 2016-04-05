@@ -74,6 +74,7 @@ void MainWindow::UpdateCamera()
     qDebug()<<"image_buf"<<*image_buf<<endl;
     this->qimage_ = QImage::fromData(image_buf,800*480*4+54,NULL);
 
+
     pixmap_ = QPixmap::fromImage(this->qimage_, 0);
     ui->labelvideo->setPixmap(this->pixmap_);
     qDebug()<<"start get vedio............................."<<endl;
