@@ -38,6 +38,11 @@ void AirIrDA::SendMsg(qint8 &cmd, qint8 &content)
         if(current_temp_ < 0x10) current_temp_ = 0x10;
         msg_[5] = current_temp_;
     }
+    else if(cmd == 0x04)
+    {
+        if(content) msg_[5] = 0xff;
+        else msg_[5] = 0x00;
+    }
     else
     {
         msg_[5] = content;
