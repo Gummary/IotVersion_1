@@ -21,7 +21,7 @@ public:
     virtual void HandleMsg(const QByteArray &msg) = 0;
     virtual void set_serial_service(SerialService *service) = 0;
     virtual void set_socket_service(SocketClass *service) = 0;
-    virtual void SendMsg(qint8 &cmd) = 0;
+    virtual void SendMsg(qint8 &cmd, qint8 &content) = 0;
     virtual QByteArray GetJson() = 0;
     virtual void CheckStatus() = 0;
     virtual void set_time_cycle(int &cycle) = 0;

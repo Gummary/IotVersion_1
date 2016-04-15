@@ -86,7 +86,7 @@ void LedAndMotor::WriteToSerial(const QByteArray &byte)
     }
 }
 
-void LedAndMotor::SendMsg(qint8 &cmd)
+void LedAndMotor::SendMsg(qint8 &cmd, qint8 &content)
 {
     if (1 > cmd || 12 < cmd) {
         return ;

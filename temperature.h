@@ -18,7 +18,7 @@ public:
 
     void HandleMsg(const QByteArray &byte);
 
-    void SendMsg(qint8 &cmd);
+    void SendMsg(qint8 &cmd, qint8 &content);
 
     QByteArray GetJson();
 

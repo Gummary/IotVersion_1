@@ -3,7 +3,19 @@
 #include "temperature.h"
 #include "ledandmotor.h"
 #include "replays.h"
+#include "airirda.h"
 
+
+unsigned char Varify (unsigned char  *date, unsigned short len )
+{
+    unsigned char num = 0;
+    unsigned short i;
+    for (i = 0; i < len; i++)
+    {
+        num+= date[i];
+    }
+    return num;
+}
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -26,44 +38,47 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(my_socket_service_,SIGNAL(SocketMsg(QByteArray,qint64)), this, SLOT(ReadSocket(QByteArray,qint64)));
 
     int time = READTIME;
-    led_moudle_ = new LedAndMotor();
-    led_moudle_->set_serial_service(my_serial_service_);
-    led_moudle_->set_socket_service(my_socket_service_);
-    led_moudle_->set_time_cycle(time);
-
-    temp_moudle_ = new Temperature();
-    temp_moudle_->set_serial_service(my_serial_service_);
-    temp_moudle_->set_socket_service(my_socket_service_);
-    temp_moudle_->set_time_cycle(time);
-
     replay_moudle_ = new Replays();
-    replay_moudle_->set_serial_service(my_serial_service_);
-    replay_moudle_->set_socket_service(my_socket_service_);
-    replay_moudle_->set_time_cycle(time);
+    temp_moudle_ = new Temperature();
+    air_moudle_ = new AirIrDA();
+    moudle_hash_.insert(0x0a, replay_moudle_);
+    moudle_hash_.insert(0x02, temp_moudle_);
+    moudle_hash_.insert(0x0f, air_moudle_);
 
 
+    QHash<qint8, AbstractMoudle*>::const_iterator it = moudle_hash_.constBegin();
+    while(it!=moudle_hash_.constEnd())
+    {
+        AbstractMoudle *temp = it.value();
+        temp->set_serial_service(my_serial_service_);
+        temp->set_socket_service(my_socket_service_);
+        temp->set_time_cycle(time);
+        it++;
+    }
 
     read_timer_ = new QTimer();
     connect(read_timer_, SIGNAL(timeout()), this, SLOT(ReadTimerOut()));
     read_timer_->start(READTIME);
 
-
-    pic_write_ = false;
-    camera_start_ = false;
-    camera_timer_ = new QTimer();
-    connect(camera_timer_,SIGNAL(timeout()), this, SLOT(UpdateCamera()));
-    deviceOpen();
-    deviceInit();
-
-
-
+    //InitCamera();
 }
 
 MainWindow::~MainWindow()
 {
     my_serial_service_->ReleaseSerial();
     my_socket_service_->ReleaseSocket();
+    deviceUninit();
     delete ui;
+}
+
+void MainWindow::InitCamera()
+{
+    pic_write_ = false;
+    camera_start_ = false;
+    camera_timer_ = new QTimer();
+    connect(camera_timer_,SIGNAL(timeout()), this, SLOT(UpdateCamera()));
+    deviceOpen();
+    deviceInit();
 }
 
 void MainWindow::UpdateCamera()
@@ -71,13 +86,13 @@ void MainWindow::UpdateCamera()
     unsigned char image_buf[1536000+54];
 
     frameRead(image_buf);
-    qDebug()<<"image_buf"<<*image_buf<<endl;
+    //qDebug()<<"image_buf"<<*image_buf<<endl;
+    SendPicture(image_buf);
     this->qimage_ = QImage::fromData(image_buf,800*480*4+54,NULL);
 
 
     pixmap_ = QPixmap::fromImage(this->qimage_, 0);
     ui->labelvideo->setPixmap(this->pixmap_);
-    qDebug()<<"start get vedio............................."<<endl;
 
     if (pic_write_)
     {
@@ -91,51 +106,27 @@ void MainWindow::UpdateCamera()
 
 void MainWindow::ReadTimerOut()
 {
-    //读取串口消息
     QByteArray byte;
     qint64 length_ = my_serial_service_->ReadFromSerial(byte);
-    char *msg = byte.data();
-    if(msg[3] == 0x06) led_moudle_->HandleMsg(byte);
-    if(msg[3] == 0x02) temp_moudle_->HandleMsg(byte);
-    if(msg[3] == 0x0A) replay_moudle_->HandleMsg(byte);
+    //if(byte[3] == 0x0f) qDebug()<< byte.toHex() << "==IrDA==";
+    //else qDebug() << byte.toHex()<<"==Other==";
+
 }
 
 void MainWindow::ReadSocket(QByteArray byte, qint64 length)
 {
-    qDebug()<<byte;
-    qint8 msg = 0x00;
-
-
-    if(byte[0] == 0x0a)
-    {
-        char id = (char)byte[1];
-        if(id == 1)
-        {
-            if(byte[2] == 1)    msg = 1;
-            else                msg = 2;
-        }
-        else if(id == 2)
-        {
-            if(byte[2] == 1)    msg = 3;
-            else                msg = 4;
-        }
-        else if(id == 3)
-        {
-            if(byte[2] == 1)    msg = 5;
-            else                msg = 6;
-        }
-        else if(id == 4)
-        {
-            if(byte[2] == 1)    msg = 7;
-            else                msg = 8;
-        }
-    }
-    replay_moudle_->SendMsg(msg);
+    char *b = byte.data();
+    qint8 node = b[0];
+    AbstractMoudle *moudle = moudle_hash_[node];
+    qint8 m1 = b[1];
+    qint8 m2 = b[2];
+    moudle->SendMsg(m1, m2);
 }
 
 
 void MainWindow::on_OPEN_clicked()
 {
+    /*
     if(camera_start_)
     {
         camera_start_ = false;
@@ -147,11 +138,34 @@ void MainWindow::on_OPEN_clicked()
         captureStart();
         camera_timer_->start(300);
 
-    }
+    }*/
+
 }
 
 void MainWindow::on_CLOSE_clicked()
 {
+    //camera_start_ = false;
+    //camera_timer_->stop();
     //qint8 msg = 2;
     //replay_moudle_->SendMsg(msg);
+    /*QByteArray m("\x40\x07\x01\x0f\x04\x00\x00", 7);
+    char *str = m.data();
+    m[6] = Varify((unsigned char *)str, 6);
+    SerialService *service = SerialClass::GetService();
+    service->WriteToSerial(m);*/
+}
+
+void MainWindow::SendPicture(unsigned char *pic)
+{
+    qDebug()<<"sending pic";
+    char *t = (char *)pic;
+    QString temp = QString(t);
+    using namespace std;
+    Json::Value root;
+    root["ID"] = "10";
+    root["PIC"] = temp.toStdString();
+
+    std::string out = root.toStyledString();
+    const char* status = out.c_str();
+    my_socket_service_->WriteToSocket(QByteArray((char *)status));
 }

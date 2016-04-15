@@ -41,7 +41,7 @@ void Temperature::HandleMsg(const QByteArray &byte)
     service->WriteToSocket(json_msg);
 }
 
-void Temperature::SendMsg(qint8 &)
+void Temperature::SendMsg(qint8 &, qint8 &)
 {
 
 }

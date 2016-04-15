@@ -1,0 +1,58 @@
+#include "airirda.h"
+
+AirIrDA::AirIrDA()
+{
+}
+
+QByteArray AirIrDA::msg_("\x40\x07\x01\x0f\x00\x00\x00", 7);
+qint8 AirIrDA::current_temp_(0x16);
+
+void AirIrDA::WriteToSerial(const QByteArray &byte)
+{
+
+}
+
+void AirIrDA::GetID(QByteArray &id)
+{
+    id.append("0x0f");
+}
+
+void AirIrDA::HandleMsg(const QByteArray &byte)
+{
+    Moudle::HandleMsg(byte);
+}
+
+void AirIrDA::SendMsg(qint8 &cmd, qint8 &content)
+{
+    if(cmd<1 || cmd >9)
+    {
+        return;
+    }
+
+    msg_[4] = cmd;
+    if(cmd == 0x06)
+    {
+        if(content) current_temp_++;
+        else current_temp_--;
+        if(current_temp_ > 0x1e) current_temp_ = 0x1e;
+        if(current_temp_ < 0x10) current_temp_ = 0x10;
+        msg_[5] = current_temp_;
+    }
+    else
+    {
+        msg_[5] = content;
+    }
+
+    unsigned char var;
+    char *str;
+    str = msg_.data();
+    var = Moudle::Varify((unsigned char *)str, 6);
+    msg_[6] = var;
+    WriteToSerial(msg_);
+
+}
+
+QByteArray AirIrDA::GetJson()
+{
+
+}

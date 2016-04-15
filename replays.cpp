@@ -28,8 +28,6 @@ void Replays::GetID(QByteArray &id)
 void Replays::HandleMsg(const QByteArray &byte)//处理收到的消息
 {
     Moudle::HandleMsg(byte);
-
-    qDebug()<<byte.toHex()<<"====";
     int len;
     len = byte[1];
     if (len == 8 && byte[4] != 0xaa)
@@ -72,58 +70,69 @@ void Replays::HandleMsg(const QByteArray &byte)//处理收到的消息
     }
 }
 
-void Replays::SendMsg(qint8 &cmd)//发送消息
+void Replays::SendMsg(qint8 &cmd, qint8 &content)//发送消息
 {
-    if (1 > cmd || 10 < cmd)
+    if (1 > cmd || 5 < cmd)
     {
         return ;
     }
-    switch(cmd)
+    if(!(content == 0||content == 1)) return;
+
+    if(cmd == 0x01)
     {
-        case 1:  //第一个继电器开
-            msg_[4] = 0x08;
+        msg_[4] = 0x08;
+        if(content)
+        {
             msg_[5] = 0x08;
             replays_status_[0] = true;
-            qDebug()<<"Open 1";
-            break;
-        case 2:
-            msg_[4] = 0x08;
+        }
+        else
+        {
             msg_[5] = 0x00;
             replays_status_[0] = false;
-            qDebug()<<"CLose 1";
-            break;
-        case 3:   //第二个继电器开
-            msg_[4] = 0x04;
+        }
+    }
+    else if(cmd == 0x02)
+    {
+        msg_[4] = 0x04;
+        if(content)
+        {
             msg_[5] = 0x04;
             replays_status_[1] = true;
-            break;
-        case 4:
-            msg_[4] = 0x04;
+        }
+        else
+        {
             msg_[5] = 0x00;
             replays_status_[1] = false;
-            break;
-        case 5:   //第三个继电器开
-            msg_[4] = 0x02;
+        }
+    }
+    else if(cmd == 0x03)
+    {
+        msg_[4] = 0x02;
+        if(content)
+        {
             msg_[5] = 0x02;
             replays_status_[2] = true;
-            break;
-        case 6:
-            msg_[4] = 0x02;
+        }
+        else
+        {
             msg_[5] = 0x00;
             replays_status_[2] = false;
-            break;
-        case 7:   //第四个继电器开
-            msg_[4] = 0x01;
+        }
+    }
+    else if(cmd == 0x04)
+    {
+        msg_[4] = 0x01;
+        if(content)
+        {
             msg_[5] = 0x01;
             replays_status_[3] = true;
-            break;
-        case 8:
-            msg_[4] = 0x01;
+        }
+        else
+        {
             msg_[5] = 0x00;
             replays_status_[3] = false;
-            break;
-        default:
-            break;
+        }
     }
 
     unsigned char var;

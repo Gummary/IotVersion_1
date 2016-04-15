@@ -7,8 +7,10 @@
 #include <QByteArray>
 #include <QImage>
 #include <QPixmap>
+#include <QHash>
 #include "posix_qextserialport.h"
 #include "camerainit.h"
+#include "json/json.h"
 
 #include "abstracemoudle.h"
 #include "serialclass.h"
@@ -30,9 +32,13 @@ class MainWindow : public QMainWindow
     
 public:
     explicit MainWindow(QWidget *parent = 0);
+
+    void SendPicture(unsigned char *);
+
     ~MainWindow();
 
-
+private:
+    void InitCamera();
     
 private slots:
     void ReadTimerOut();
@@ -52,10 +58,12 @@ private:
     SocketClass *my_socket_service_;
 
 private:
-    AbstractMoudle *led_moudle_;
     AbstractMoudle *temp_moudle_;
     AbstractMoudle *replay_moudle_;
+    AbstractMoudle *air_moudle_;
     Clock *c;
+
+    QHash<qint8, AbstractMoudle*> moudle_hash_;
 
     QImage qimage_;
     QPixmap pixmap_;
