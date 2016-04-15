@@ -117,6 +117,7 @@ void MainWindow::ReadSocket(QByteArray byte, qint64 length)
 {
     char *b = byte.data();
     qint8 node = b[0];
+    qDebug()<< "Read from Socket : " << byte.toHex();
     AbstractMoudle *moudle = moudle_hash_[node];
     qint8 m1 = b[1];
     qint8 m2 = b[2];
