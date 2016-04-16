@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     clock.cpp \
     replays.cpp \
     camerainit.cpp \
-    airirda.cpp
+    airirda.cpp \
+    smoke.cpp
 
 HEADERS  += mainwindow.h \
     posix_qextserialport.h \
@@ -54,7 +55,8 @@ HEADERS  += mainwindow.h \
     clock.h \
     replays.h \
     camerainit.h \
-    airirda.h
+    airirda.h \
+    smoke.h
 
 FORMS    += mainwindow.ui
 

@@ -4,18 +4,7 @@
 #include "ledandmotor.h"
 #include "replays.h"
 #include "airirda.h"
-
-
-unsigned char Varify (unsigned char  *date, unsigned short len )
-{
-    unsigned char num = 0;
-    unsigned short i;
-    for (i = 0; i < len; i++)
-    {
-        num+= date[i];
-    }
-    return num;
-}
+#include "smoke.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -41,9 +30,11 @@ MainWindow::MainWindow(QWidget *parent) :
     replay_moudle_ = new Replays();
     temp_moudle_ = new Temperature();
     air_moudle_ = new AirIrDA();
+    smoke_moudle_ = new Smoke();
     moudle_hash_.insert(0x0a, replay_moudle_);
     moudle_hash_.insert(0x02, temp_moudle_);
     moudle_hash_.insert(0x0f, air_moudle_);
+    moudle_hash_.insert(0x04, smoke_moudle_);
 
 
     QHash<qint8, AbstractMoudle*>::const_iterator it = moudle_hash_.constBegin();
@@ -60,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(read_timer_, SIGNAL(timeout()), this, SLOT(ReadTimerOut()));
     read_timer_->start(READTIME);
 
-    //InitCamera();
+    InitCamera();
 }
 
 MainWindow::~MainWindow()
@@ -108,8 +99,10 @@ void MainWindow::ReadTimerOut()
 {
     QByteArray byte;
     qint64 length_ = my_serial_service_->ReadFromSerial(byte);
-    //if(byte[3] == 0x0f) qDebug()<< byte.toHex() << "==IrDA==";
-    //else qDebug() << byte.toHex()<<"==Other==";
+    if(byte.isEmpty()) return;
+    qint8 node = byte[3];
+    AbstractMoudle* temp = moudle_hash_.value(node, NULL);
+    if(temp!=NULL) temp->HandleMsg(byte);
 
 }
 

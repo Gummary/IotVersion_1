@@ -61,6 +61,7 @@ private:
     AbstractMoudle *temp_moudle_;
     AbstractMoudle *replay_moudle_;
     AbstractMoudle *air_moudle_;
+    AbstractMoudle *smoke_moudle_;
     Clock *c;
 
     QHash<qint8, AbstractMoudle*> moudle_hash_;
