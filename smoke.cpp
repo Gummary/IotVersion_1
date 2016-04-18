@@ -12,9 +12,9 @@ void Smoke::WriteToSerial(const QByteArray &byte)
 
 }
 
-void Smoke::GetID(QByteArray &id)
+void Smoke::GetID(qint8 &id)
 {
-    id.append("0x04");
+    id=0x04;
 }
 
 void Smoke::HandleMsg(const QByteArray &byte)
@@ -24,16 +24,22 @@ void Smoke::HandleMsg(const QByteArray &byte)
     {
         smoke_state_ = true;
         qDebug() << "Have Smoke";
+        QByteArray json_msg = GetSensorInfo();
+        SocketClass* service = get_socket_service();
+        service->WriteToSocket(json_msg);
     }
     else
     {
-        qDebug() << "Smoke disapper";
-        smoke_state_ = false;
+        if(smoke_state_)
+        {
+            qDebug() << "Smoke disapper";
+            smoke_state_ = false;
+            QByteArray json_msg = GetSensorInfo();
+            SocketClass* service = get_socket_service();
+            service->WriteToSocket(json_msg);
+        }
     }
 
-    QByteArray json_msg = GetJson();
-    SocketClass* service = get_socket_service();
-    service->WriteToSocket(json_msg);
 }
 
 void Smoke::SendMsg(qint8 &, qint8 &)
@@ -41,17 +47,11 @@ void Smoke::SendMsg(qint8 &, qint8 &)
 
 }
 
-QByteArray Smoke::GetJson()
+QByteArray Smoke::GetSensorInfo()
 {
-    using namespace std;
-    Json::Value root;
-    root["ID"] = "4";
-    if(smoke_state_)
-        root["STATE"] = "TRUE";
-    else
-        root["STATE"] = "FALSE";
-
-    std::string out = root.toStyledString();
-    const char* status = out.c_str();
-    return QByteArray((char*)status);
+    QString info;
+    info+="0/4/";
+    if(smoke_state_) info+="1";
+    else info+="0";
+    return info.toAscii();
 }

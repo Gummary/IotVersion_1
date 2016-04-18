@@ -16,13 +16,13 @@ public:
 
     void WriteToSerial(const QByteArray &byte);
 
-    void GetID(QByteArray &id);
+    void GetID(qint8 &id);
 
     void HandleMsg(const QByteArray &byte);
 
     void SendMsg(qint8 &cmd, qint8 &content);
 
-    QByteArray GetJson();
+    QByteArray GetSensorInfo();
     
 signals:
     

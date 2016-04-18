@@ -24,11 +24,11 @@ public:
 
     virtual void CheckStatus();
 
-    virtual void GetID(QByteArray &id) = 0;
+    virtual void GetID(qint8 &id) = 0;
 
     virtual void SendMsg(qint8 &cmd, qint8 &content) = 0;
 
-    virtual QByteArray GetJson() = 0;
+    virtual QByteArray GetSensorInfo() = 0;
 
     virtual void set_time_cycle(int &timecycle);
 signals:

@@ -21,9 +21,10 @@ void AirIrDA::WriteToSerial(const QByteArray &byte)
     }
 }
 
-void AirIrDA::GetID(QByteArray &id)
+void AirIrDA::GetID(qint8 &id)
 {
-    id.append("0x0f");
+    //id.append("0x0f");
+    id = 0x0f;
 }
 
 void AirIrDA::HandleMsg(const QByteArray &byte)
@@ -67,7 +68,7 @@ void AirIrDA::SendMsg(qint8 &cmd, qint8 &content)
 
 }
 
-QByteArray AirIrDA::GetJson()
+QByteArray AirIrDA::GetSensorInfo()
 {
 
 }

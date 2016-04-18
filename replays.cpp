@@ -20,9 +20,9 @@ void Replays::WriteToSerial(const QByteArray &byte)
     }
 }
 
-void Replays::GetID(QByteArray &id)
+void Replays::GetID(qint8 &id)
 {
-    id.append("0x0a");
+    id=0x0a;
 }
 
 void Replays::HandleMsg(const QByteArray &byte)//处理收到的消息
@@ -145,7 +145,7 @@ void Replays::SendMsg(qint8 &cmd, qint8 &content)//发送消息
     confirm_timer_->start(500);
 }
 
-QByteArray Replays::GetJson()
+QByteArray Replays::GetSensorInfo()
 {
 
 }

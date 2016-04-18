@@ -11,12 +11,12 @@ int Moudle::time_cycle_(100);
 void Moudle::HandleMsg(const QByteArray &)
 {
     count_ = 0;
-    /*
     if(0!=coor_)
     {
-        coor_->EmitConnected();
-    }*/
-    qDebug() << "Led Connect";
+        qint8  id;
+        GetID(id);
+        coor_->EmitStatus(id, true);
+    }
 }
 
 void Moudle::set_coor(Coordinator  *coor)
@@ -50,7 +50,9 @@ void Moudle::CheckStatus()
     {
         if(0!=coor_)
         {
-            coor_->EmitDisconnected();
+            qint8  id;
+            GetID(id);
+            coor_->EmitStatus(id, false);
         }
     }
     else

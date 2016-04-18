@@ -8,9 +8,9 @@ LedAndMotor::LedAndMotor()
 
 QByteArray LedAndMotor::msg_("\x40\x06\x01\x06\x00\xFF", 6);
 
-void LedAndMotor::GetID(QByteArray &id)
+void LedAndMotor::GetID(qint8 &id)
 {
-    id.append("0x06");
+    id = 0x06;
 }
 
 void LedAndMotor::HandleMsg(const QByteArray &byte)
@@ -70,7 +70,7 @@ void LedAndMotor::HandleMsg(const QByteArray &byte)
         }
     }
 
-    QByteArray json_msg = GetJson();
+    QByteArray json_msg = GetSensorInfo();
     SocketClass *service = get_socket_service();
     service->WriteToSocket(json_msg);
 
@@ -139,7 +139,7 @@ void LedAndMotor::SendMsg(qint8 &cmd, qint8 &content)
 }
 
 
-QByteArray LedAndMotor::GetJson()
+QByteArray LedAndMotor::GetSensorInfo()
 {
     using namespace std;
     Json::Value root;

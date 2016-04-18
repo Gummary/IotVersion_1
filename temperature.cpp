@@ -3,7 +3,8 @@
 Temperature::Temperature():
     temperature_(0),
     light_(0),
-    humidity_(0)
+    humidity_(0),
+    time_count_(0)
 {
 }
 
@@ -13,9 +14,9 @@ void Temperature::WriteToSerial(const QByteArray &)
 
 }
 
-void Temperature::GetID(QByteArray &id)
+void Temperature::GetID(qint8 &id)
 {
-    id.append("0x02");
+    id=0x02;
 }
 
 void Temperature::HandleMsg(const QByteArray &byte)
@@ -36,9 +37,13 @@ void Temperature::HandleMsg(const QByteArray &byte)
         light_ = light_ / 4;
         light_ = light_ * 913;
     }
-    QByteArray json_msg = GetJson();
-    SocketClass* service = get_socket_service();
-    service->WriteToSocket(json_msg);
+    if(time_count_==99)
+    {
+        QByteArray json_msg = GetSensorInfo();
+        SocketClass* service = get_socket_service();
+        service->WriteToSocket(json_msg);
+    }
+    time_count_ = (time_count_+1)%100;
 }
 
 void Temperature::SendMsg(qint8 &, qint8 &)
@@ -46,23 +51,12 @@ void Temperature::SendMsg(qint8 &, qint8 &)
 
 }
 
-QByteArray Temperature::GetJson()
+QByteArray Temperature::GetSensorInfo()
 {
-    QString temp;
-    using namespace std;
-    Json::Value root;
-    root["ID"] = "6";
-
-    temp = QString::number(temperature_);
-    root["TEMPERATURE"] = temp.toStdString();
-
-    //temp = QString::number(humidity_);
-    //root["HUMB"] = temp.toStdString();
-
-    temp = QString::number(light_,'f',1);
-    root["LIGHT"] = temp.toStdString();
-
-    std::string out = root.toStyledString();
-    const char* status = out.c_str();
-    return QByteArray((char*)status);
+    QString info;
+    info+="0/2/";
+    info+=QString::number(temperature_)+";";
+    info+=QString::number(humidity_)+";";
+    info+=QString::number(light_,'f',1);
+    return info.toAscii();
 }
