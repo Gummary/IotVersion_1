@@ -27,7 +27,9 @@ SOURCES += main.cpp\
     smoke.cpp \
     moudleset.cpp \
     coorimpl.cpp \
-    ultrasonicandpwm.cpp
+    ultrasonicandpwm.cpp \
+    login.cpp \
+    WidgetKeyboard.cpp
 
 HEADERS  += mainwindow.h \
     posix_qextserialport.h \
@@ -47,9 +49,13 @@ HEADERS  += mainwindow.h \
     smoke.h \
     moudleset.h \
     coorimpl.h \
-    ultrasonicandpwm.h
+    ultrasonicandpwm.h \
+    login.h \
+    WidgetKeyboard.hpp
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    WidgetKeyboard.ui \
+    login.ui
 
 unix:DEFINES           += _TTY_POSIX_
 
