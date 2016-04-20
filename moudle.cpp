@@ -8,7 +8,7 @@ Moudle::Moudle(QObject *parent) :
 
 
 int Moudle::time_cycle_(100);
-void Moudle::HandleMsg(const QByteArray &)
+void Moudle::HandleSerialMsg(const QByteArray &)
 {
     count_ = 0;
     if(0!=coor_)

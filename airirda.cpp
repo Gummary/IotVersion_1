@@ -27,9 +27,9 @@ void AirIrDA::GetID(qint8 &id)
     id = 0x0f;
 }
 
-void AirIrDA::HandleMsg(const QByteArray &byte)
+void AirIrDA::HandleSerialMsg(const QByteArray &byte)
 {
-    Moudle::HandleMsg(byte);
+    Moudle::HandleSerialMsg(byte);
 }
 
 void AirIrDA::SendMsg(qint8 &cmd, qint8 &content)
@@ -71,4 +71,9 @@ void AirIrDA::SendMsg(qint8 &cmd, qint8 &content)
 QByteArray AirIrDA::GetSensorInfo()
 {
 
+}
+
+void AirIrDA::HandleSocketMsg(qint8 &cmd, qint8 &content)
+{
+    SendMsg(cmd, content);
 }

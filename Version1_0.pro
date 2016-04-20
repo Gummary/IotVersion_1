@@ -19,12 +19,6 @@ SOURCES += main.cpp\
     socketclass.cpp \
     moudle.cpp \
     ledandmotor.cpp \
-    lib_json/json_internalarray.inl \
-    lib_json/json_internalmap.inl \
-    lib_json/json_reader.cpp \
-    lib_json/json_value.cpp \
-    lib_json/json_valueiterator.inl \
-    lib_json/json_writer.cpp \
     temperature.cpp \
     clock.cpp \
     replays.cpp \
@@ -32,7 +26,8 @@ SOURCES += main.cpp\
     airirda.cpp \
     smoke.cpp \
     moudleset.cpp \
-    coorimpl.cpp
+    coorimpl.cpp \
+    ultrasonicandpwm.cpp
 
 HEADERS  += mainwindow.h \
     posix_qextserialport.h \
@@ -44,15 +39,6 @@ HEADERS  += mainwindow.h \
     abstracemoudle.h \
     moudle.h \
     ledandmotor.h \
-    lib_json/json_batchallocator.h \
-    json/autolink.h \
-    json/config.h \
-    json/features.h \
-    json/forwards.h \
-    json/json.h \
-    json/reader.h \
-    json/value.h \
-    json/writer.h \
     temperature.h \
     clock.h \
     replays.h \
@@ -60,7 +46,8 @@ HEADERS  += mainwindow.h \
     airirda.h \
     smoke.h \
     moudleset.h \
-    coorimpl.h
+    coorimpl.h \
+    ultrasonicandpwm.h
 
 FORMS    += mainwindow.ui
 

@@ -23,8 +23,9 @@ private slots:
 
     void ReadSocket(QByteArray byte, qint64 length);
 
-    void HandleMooudleStatus(qint8 id, bool status);
+    void HandleMoudleStatus(qint8 id, bool status);
 
+private:
     void CheckMoudleStatus();
 
 private:
@@ -35,6 +36,7 @@ private:
     AbstractMoudle *replay_moudle_;
     AbstractMoudle *air_moudle_;
     AbstractMoudle *smoke_moudle_;
+    AbstractMoudle *ultra_pwm_moudle_;
     CoorImpl *coor_;
     QHash<qint8, AbstractMoudle*> moudle_hash_;
     QHash<qint8, bool> moudle_status_;

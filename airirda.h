@@ -11,11 +11,14 @@ public:
 
     void GetID(qint8 &id);
 
-    void HandleMsg(const QByteArray &byte);
+    void HandleSerialMsg(const QByteArray &byte);
 
-    void SendMsg(qint8 &cmd, qint8 &content);
+    void HandleSocketMsg(qint8 &cmd, qint8 &content);
 
     QByteArray GetSensorInfo();
+
+private:
+    void SendMsg(qint8 &cmd, qint8 &content);
 private:
     static QByteArray msg_;
     static qint8 current_temp_;

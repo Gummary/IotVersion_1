@@ -17,9 +17,9 @@ void Smoke::GetID(qint8 &id)
     id=0x04;
 }
 
-void Smoke::HandleMsg(const QByteArray &byte)
+void Smoke::HandleSerialMsg(const QByteArray &byte)
 {
-    Moudle::HandleMsg(byte);
+    Moudle::HandleSerialMsg(byte);
     if(byte[5] == 0x01)
     {
         smoke_state_ = true;
@@ -54,4 +54,8 @@ QByteArray Smoke::GetSensorInfo()
     if(smoke_state_) info+="1";
     else info+="0";
     return info.toAscii();
+}
+void Smoke::HandleSocketMsg(qint8 &, qint8 &)
+{
+
 }

@@ -5,7 +5,6 @@
 #include <QDebug>
 #include <moudle.h>
 #include <serialservice.h>
-#include "json/json.h"
 
 
 
@@ -18,7 +17,7 @@ public:
 
     void GetID(qint8 &id);
 
-    void HandleMsg(const QByteArray &byte);
+    void HandleSerialMsg(const QByteArray &byte);
 
     void SendMsg(qint8 &cmd, qint8 &content);
 

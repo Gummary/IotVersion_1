@@ -4,7 +4,6 @@
 #include <QByteArray>
 #include <QDebug>
 #include <moudle.h>
-#include "json/json.h"
 
 class Temperature : public Moudle
 {
@@ -16,12 +15,14 @@ public:
 
     void GetID(qint8 &id);
 
-    void HandleMsg(const QByteArray &byte);
+    void HandleSerialMsg(const QByteArray &byte);
 
-    void SendMsg(qint8 &cmd, qint8 &content);
+    void HandleSocketMsg(qint8 &cmd, qint8 &content);
 
     QByteArray GetSensorInfo();
 
+private:
+    void SendMsg(qint8 &cmd, qint8 &content);
 
 private:
     int temperature_;

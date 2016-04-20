@@ -5,6 +5,7 @@
 #include "airirda.h"
 #include "smoke.h"
 #include "serialclass.h"
+#include "ultrasonicandpwm.h"
 
 MoudleSet::MoudleSet()
 {
@@ -28,14 +29,17 @@ void MoudleSet::InitMoudle()
 
     //初始化节点
     int time = READTIME;
-    replay_moudle_ = new Replays();
-    temp_moudle_ = new Temperature();
-    air_moudle_ = new AirIrDA();
-    smoke_moudle_ = new Smoke();
+    replay_moudle_      = new Replays();
+    temp_moudle_        = new Temperature();
+    air_moudle_         = new AirIrDA();
+    smoke_moudle_       = new Smoke();
+    ultra_pwm_moudle_   = new UltrasonicAndPwm();
     moudle_hash_.insert(0x0a, replay_moudle_);
     moudle_hash_.insert(0x02, temp_moudle_);
     moudle_hash_.insert(0x0f, air_moudle_);
     moudle_hash_.insert(0x04, smoke_moudle_);
+    moudle_hash_.insert(0x09, ultra_pwm_moudle_);
+    moudle_hash_.insert(0x08, ultra_pwm_moudle_);
 
     QHash<qint8, AbstractMoudle*>::const_iterator it = moudle_hash_.constBegin();
     while(it!=moudle_hash_.constEnd())
@@ -58,7 +62,7 @@ void MoudleSet::InitMoudle()
     read_timer_->start(READTIME);
 
 
-    connect(coor_, SIGNAL(Status(qint8,bool)), this, SLOT(HandleMooudleStatus(qint8,bool)));
+    connect(coor_, SIGNAL(Status(qint8,bool)), this, SLOT(HandleMoudleStatus(qint8,bool)));
 }
 
 
@@ -72,7 +76,7 @@ void MoudleSet::ReadTimerOut()
     if(byte.isEmpty()) return;
     qint8 node = byte[3];
     AbstractMoudle* temp = moudle_hash_.value(node, NULL);
-    if(temp!=NULL) temp->HandleMsg(byte);
+    if(temp!=NULL) temp->HandleSerialMsg(byte);
 
 }
 
@@ -90,8 +94,10 @@ void MoudleSet::ReadSocket(QByteArray byte, qint64 length)
         AbstractMoudle *moudle = moudle_hash_[node];
         qint8 m1 = b[1];
         qint8 m2 = b[2];
-        moudle->SendMsg(m1, m2);
+        moudle->HandleSocketMsg(m1, m2);
     }
+
+    CheckMoudleStatus();
 
 }
 
@@ -101,7 +107,7 @@ MoudleSet::~MoudleSet()
     my_socket_service_->ReleaseSocket();
 }
 
-void MoudleSet::HandleMooudleStatus(qint8 id, bool status)
+void MoudleSet::HandleMoudleStatus(qint8 id, bool status)
 {
     moudle_status_[id] = status;
 }

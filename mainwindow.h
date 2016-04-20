@@ -10,7 +10,6 @@
 #include <QHash>
 #include "posix_qextserialport.h"
 #include "camerainit.h"
-#include "json/json.h"
 
 #include "abstracemoudle.h"
 #include "serialclass.h"

@@ -6,7 +6,6 @@
 #include <moudle.h>
 #include <QTimer>
 #include <serialservice.h>
-#include "json/json.h"
 
 
 
@@ -20,9 +19,9 @@ public:
 
     void GetID(qint8 &id);
 
-    void HandleMsg(const QByteArray &byte);
+    void HandleSerialMsg(const QByteArray &byte);
 
-    void SendMsg(qint8 &cmd, qint8 &content);
+    void HandleSocketMsg(qint8 &cmd, qint8 &content);
 
     QByteArray GetSensorInfo();
 
@@ -32,7 +31,7 @@ public slots:
     void ConfirmOpen();
 
 private:
-
+    void SendMsg(qint8 &cmd, qint8 &content);
 
 private:
     static QByteArray msg_;

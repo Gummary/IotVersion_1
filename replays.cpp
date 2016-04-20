@@ -25,9 +25,9 @@ void Replays::GetID(qint8 &id)
     id=0x0a;
 }
 
-void Replays::HandleMsg(const QByteArray &byte)//处理收到的消息
+void Replays::HandleSerialMsg(const QByteArray &byte)//处理收到的消息
 {
-    Moudle::HandleMsg(byte);
+    Moudle::HandleSerialMsg(byte);
     int len;
     len = byte[1];
     if (len == 8 && byte[4] != 0xaa)
@@ -165,4 +165,10 @@ void Replays::ConfirmOpen()
         confirm_timer_->stop();
         qDebug()<<"done";
     }
+}
+
+
+void Replays::HandleSocketMsg(qint8 &cmd, qint8 &content)
+{
+    SendMsg(cmd, content);
 }

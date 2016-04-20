@@ -19,11 +19,11 @@ void Temperature::GetID(qint8 &id)
     id=0x02;
 }
 
-void Temperature::HandleMsg(const QByteArray &byte)
+void Temperature::HandleSerialMsg(const QByteArray &byte)
 {
     unsigned char adc_value[2];
 
-    Moudle::HandleMsg(byte);
+    Moudle::HandleSerialMsg(byte);
 
     if (0x01 == byte[4])
     {
@@ -44,6 +44,11 @@ void Temperature::HandleMsg(const QByteArray &byte)
         service->WriteToSocket(json_msg);
     }
     time_count_ = (time_count_+1)%100;
+}
+
+void Temperature::HandleSocketMsg(qint8 &, qint8 &)
+{
+
 }
 
 void Temperature::SendMsg(qint8 &, qint8 &)

@@ -13,9 +13,9 @@ void LedAndMotor::GetID(qint8 &id)
     id = 0x06;
 }
 
-void LedAndMotor::HandleMsg(const QByteArray &byte)
+void LedAndMotor::HandleSerialMsg(const QByteArray &byte)
 {
-    Moudle::HandleMsg(byte);
+    Moudle::HandleSerialMsg(byte);
 
     int len;
     len = byte[1];
@@ -141,24 +141,5 @@ void LedAndMotor::SendMsg(qint8 &cmd, qint8 &content)
 
 QByteArray LedAndMotor::GetSensorInfo()
 {
-    using namespace std;
-    Json::Value root;
-    root["ID"] = "2";
-    if(led_status_[0])  root["LED1"] = "1";
-    else                root["LED1"] = "0";
-    if(led_status_[1])  root["LED2"] = "1";
-    else                root["LED2"] = "0";
-    if(led_status_[2])  root["LED3"] = "1";
-    else                root["LED3"] = "0";
-    if(led_status_[3])  root["LED4"] = "1";
-    else                root["LED4"] = "0";
-
-    if(motor_status_ == 1)          root["MOTOR"] = "1";
-    else if(motor_status_ == -1)    root["MOTOR"] = "-1";
-    else                            root["MOTOR"] = "0";
-
-
-    std::string out = root.toStyledString();
-    const char* status = out.c_str();
-    return QByteArray((char*)status);
+    return NULL;
 }
