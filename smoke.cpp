@@ -12,7 +12,7 @@ void Smoke::WriteToSerial(const QByteArray &byte)
 
 }
 
-void Smoke::GetID(qint8 &id)
+qint8 Smoke::GetID(qint8 &id)
 {
     id=0x04;
 }

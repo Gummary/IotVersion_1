@@ -2,6 +2,7 @@
 
 Replays::Replays()
 {
+    confirm_counter_ = 0;
     for(int i = 0;i<4;i++)
         pre_status_[i] = replays_status_[i] = false;
     confirm_timer_ = new QTimer();
@@ -20,7 +21,7 @@ void Replays::WriteToSerial(const QByteArray &byte)
     }
 }
 
-void Replays::GetID(qint8 &id)
+qint8 Replays::GetID(qint8 &id)
 {
     id=0x0a;
 }
@@ -142,6 +143,8 @@ void Replays::SendMsg(qint8 &cmd, qint8 &content)//发送消息
     msg_[6] = var;
     WriteToSerial(msg_);
 
+
+    confirm_counter_ = 0;
     confirm_timer_->start(500);
 }
 
@@ -152,6 +155,36 @@ QByteArray Replays::GetSensorInfo()
 
 void Replays::ConfirmOpen()
 {
+    if(confirm_counter_>=5)
+    {
+        confirm_counter_ = 0;
+        for(int i = 0;i<4;i++)
+        {
+            if(replays_status_[i] != pre_status_[i])
+            {
+                QByteArray wmsg("\x0a");
+                wmsg.append('1'+i);
+                wmsg.append("\x00");
+                Moudle::HandleWrongRequest(wmsg);
+                replays_status_[i] = pre_status_[i];
+            }
+
+        }
+        confirm_timer_->stop();
+        return;
+    }
+    for(int i = 0;i<4;i++)
+    {
+        if(pre_status_[i] != replays_status_[i])
+        {
+            WriteToSerial(msg_);
+            qDebug()<<"undone";
+            confirm_counter_++;
+        }
+    }
+
+
+    /*
     if(pre_status_[0]!=replays_status_[0]
             ||pre_status_[1]!=replays_status_[1]
             ||pre_status_[2]!=replays_status_[2]
@@ -165,6 +198,7 @@ void Replays::ConfirmOpen()
         confirm_timer_->stop();
         qDebug()<<"done";
     }
+    */
 }
 
 

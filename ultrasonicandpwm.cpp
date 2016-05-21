@@ -14,13 +14,23 @@ void UltrasonicAndPwm::HandleSerialMsg(const QByteArray &byte)
 {
     unsigned short value = 0;
     Moudle::HandleSerialMsg(byte);
-    if(!open_) return;
+
     if(byte[3] == 0x08)//超声波
     {
         value = value + byte[5];
         value = value*256;
         value = value + ((unsigned short)byte[6]&0x00ff);
-        DealWithDisance(value);
+        if(value  == 0) return;
+        //qDebug() << "Current : " << current_distance_ << "Rece : " << value;
+        if(open_)
+        {
+            DealWithDisance(value);
+            current_distance_ = value;
+        }
+
+
+        else
+            current_distance_ = value;
     }
 
     if(byte[3] == 0x09)//PWM调光
@@ -47,8 +57,11 @@ void UltrasonicAndPwm::DealWithDisance(unsigned short &value)
     if(current_distance_ - value >= 300)
     {
         qDebug() << "People Awake";
-        light_timer_->start(30000);
-        light_status_ = 0x01;
+        if(!light_timer_->isActive())
+        {
+            light_timer_->start(3000);
+            light_status_ = 0x01;
+        }
     }
 }
 
@@ -68,11 +81,16 @@ void UltrasonicAndPwm::ChangeLightState()
         SendMsg(cmd, light_status_);
         light_timer_->stop();
     }
+    else
+    {
+        light_status_++;
+    }
 
 }
 
 void UltrasonicAndPwm::HandleSocketMsg(qint8 &, qint8 &content)
 {
+    qDebug() << " Receive msg : " << content;
     if(content) open_ = true;
     else open_ = false;
 }
@@ -86,7 +104,7 @@ void UltrasonicAndPwm::WriteToSerial(const QByteArray &byte)
     }
 }
 
-void UltrasonicAndPwm::GetID(qint8 &id)
+qint8 UltrasonicAndPwm::GetID(qint8 &id)
 {
     id = 0x08;
 }

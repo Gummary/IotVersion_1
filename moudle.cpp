@@ -16,6 +16,7 @@ void Moudle::HandleSerialMsg(const QByteArray &)
         qint8  id;
         GetID(id);
         coor_->EmitStatus(id, true);
+        qDebug() << id;
     }
 }
 
@@ -76,4 +77,9 @@ unsigned char Moudle::Varify (unsigned char  *date, unsigned short len )
 void Moudle::set_time_cycle(int &timecycle)
 {
     time_cycle_ = timecycle;
+}
+
+void Moudle::HandleWrongRequest(QByteArray &wrong_msg)
+{
+    socket_serivce_->WriteToSocket(wrong_msg);
 }

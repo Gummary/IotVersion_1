@@ -17,7 +17,7 @@ public:
 
     void WriteToSerial(const QByteArray &byte);
 
-    void GetID(qint8 &id);
+    qint8 GetID(qint8 &id);
 
     void HandleSerialMsg(const QByteArray &byte);
 
@@ -38,6 +38,7 @@ private:
     bool replays_status_[4];
     bool pre_status_[4];
     QTimer *confirm_timer_;
+    int confirm_counter_;
 
 };
 

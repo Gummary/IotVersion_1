@@ -23,7 +23,9 @@ Login::~Login()
 
 void Login::on_Login_Btn_clicked()
 {
+    keyboard->close();
     this->close();
+
 }
 
 void Login::on_UserName_Edit_textEdited(const QString &arg1)
@@ -47,6 +49,7 @@ bool Login::eventFilter(QObject *watched, QEvent *event)
         if(event->type() == QEvent::MouseButtonPress)
         {
             //qDebug() << "PassWd_Pressed";
+            keyboard->show();
         }
     }
 

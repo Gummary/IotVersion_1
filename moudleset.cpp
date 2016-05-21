@@ -86,15 +86,23 @@ void MoudleSet::ReadTimerOut()
 
 void MoudleSet::ReadSocket(QByteArray byte, qint64 length)
 {
+    qDebug() << "Receive Form Server : " << byte.toHex();
     char *b = byte.data();
     qint8 node = b[0];
+    AbstractMoudle *moudle = moudle_hash_[node];
     if(moudle_status_.value(node, false))
     {
-        qDebug()<< "Read from Socket : " << byte.toHex();
-        AbstractMoudle *moudle = moudle_hash_[node];
+        //qDebug()<< "Read from Socket : " << byte.toHex();
         qint8 m1 = b[1];
         qint8 m2 = b[2];
         moudle->HandleSocketMsg(m1, m2);
+        qint8 id;
+        moudle->GetID(id);
+        //qDebug() << "Moudle ID" <<id;
+    }
+    else
+    {
+
     }
 
     CheckMoudleStatus();
@@ -110,6 +118,7 @@ MoudleSet::~MoudleSet()
 void MoudleSet::HandleMoudleStatus(qint8 id, bool status)
 {
     moudle_status_[id] = status;
+    //qDebug() << id << status;
 }
 
 void MoudleSet::CheckMoudleStatus()

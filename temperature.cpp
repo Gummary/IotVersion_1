@@ -14,7 +14,7 @@ void Temperature::WriteToSerial(const QByteArray &)
 
 }
 
-void Temperature::GetID(qint8 &id)
+qint8 Temperature::GetID(qint8 &id)
 {
     id=0x02;
 }
@@ -37,13 +37,13 @@ void Temperature::HandleSerialMsg(const QByteArray &byte)
         light_ = light_ / 4;
         light_ = light_ * 913;
     }
-    if(time_count_==99)
+    if(time_count_==9)
     {
         QByteArray json_msg = GetSensorInfo();
         SocketClass* service = get_socket_service();
         service->WriteToSocket(json_msg);
     }
-    time_count_ = (time_count_+1)%100;
+    time_count_ = (time_count_+1)%10;
 }
 
 void Temperature::HandleSocketMsg(qint8 &, qint8 &)

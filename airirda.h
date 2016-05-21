@@ -9,7 +9,7 @@ public:
 
     void WriteToSerial(const QByteArray &byte);
 
-    void GetID(qint8 &id);
+    qint8 GetID(qint8 &id);
 
     void HandleSerialMsg(const QByteArray &byte);
 

@@ -8,9 +8,9 @@ LedAndMotor::LedAndMotor()
 
 QByteArray LedAndMotor::msg_("\x40\x06\x01\x06\x00\xFF", 6);
 
-void LedAndMotor::GetID(qint8 &id)
+qint8 LedAndMotor::GetID(qint8 &id)
 {
-    id = 0x06;
+    return id = 0x06;
 }
 
 void LedAndMotor::HandleSerialMsg(const QByteArray &byte)

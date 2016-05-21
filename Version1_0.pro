@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     coorimpl.cpp \
     ultrasonicandpwm.cpp \
     login.cpp \
-    WidgetKeyboard.cpp
+    WidgetKeyboard.cpp \
+    curtain.cpp
 
 HEADERS  += mainwindow.h \
     posix_qextserialport.h \
@@ -51,7 +52,8 @@ HEADERS  += mainwindow.h \
     coorimpl.h \
     ultrasonicandpwm.h \
     login.h \
-    WidgetKeyboard.hpp
+    WidgetKeyboard.hpp \
+    curtain.h
 
 FORMS    += mainwindow.ui \
     WidgetKeyboard.ui \

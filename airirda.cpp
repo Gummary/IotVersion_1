@@ -10,21 +10,12 @@ qint8 AirIrDA::current_temp_(0x16);
 void AirIrDA::WriteToSerial(const QByteArray &byte)
 {
     SerialService *serivce = Moudle::get_serial_service();
-    if(0!=serivce)
-    {
-        qDebug() << "Write to Serial";
         serivce->WriteToSerial(byte);
-    }
-    else
-    {
-        qDebug() << "Write failed";
-    }
 }
 
-void AirIrDA::GetID(qint8 &id)
+qint8 AirIrDA::GetID(qint8 &id)
 {
-    //id.append("0x0f");
-    id = 0x0f;
+    return id = 0x0f;
 }
 
 void AirIrDA::HandleSerialMsg(const QByteArray &byte)

@@ -25,7 +25,7 @@ WidgetKeyboard::WidgetKeyboard(QWidget *parent) : QWidget(0)
     setupUi(this);
     //resize(800,200);
     //resize(480, 120);
-    //resize(100,50);
+    //esize(100,50);
     setFixedSize(400, 172);
     this->setWindowFlags(Qt::Tool);
     m_pParent = parent;

@@ -18,6 +18,8 @@ public:
     ~MoudleSet();
     void InitMoudle();
 
+     QHash<qint8, AbstractMoudle*> moudle_hash_;
+
 private slots:
     void ReadTimerOut();
 
@@ -38,7 +40,7 @@ private:
     AbstractMoudle *smoke_moudle_;
     AbstractMoudle *ultra_pwm_moudle_;
     CoorImpl *coor_;
-    QHash<qint8, AbstractMoudle*> moudle_hash_;
+
     QHash<qint8, bool> moudle_status_;
 };
 

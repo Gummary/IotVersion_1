@@ -75,6 +75,9 @@ void MainWindow::on_OPEN_clicked()
         camera_timer_->start(300);
 
     }*/
+    SerialService *service = SerialClass::GetService();
+    QByteArray m("\x40\x07\x01\x10\x01\x01\x00", 7);
+    service->WriteToSerial(m);
 
 }
 
@@ -89,6 +92,7 @@ void MainWindow::on_CLOSE_clicked()
     m[6] = Varify((unsigned char *)str, 6);
     SerialService *service = SerialClass::GetService();
     service->WriteToSerial(m);*/
+
 }
 
 void MainWindow::SendPicture(unsigned char *pic)

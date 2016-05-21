@@ -16,7 +16,7 @@ public:
 class AbstractMoudle
 {
 public:
-    virtual void GetID(qint8 &id) = 0;
+    virtual qint8 GetID(qint8 &id) = 0;
     virtual void HandleSerialMsg(const QByteArray &msg) = 0;
     virtual void HandleSocketMsg(qint8 &cmd, qint8 &content) = 0;
     virtual void set_serial_service(SerialService *service) = 0;
@@ -25,6 +25,7 @@ public:
     virtual QByteArray GetSensorInfo() = 0;
     virtual void CheckStatus() = 0;
     virtual void set_time_cycle(int &cycle) = 0;
+    virtual void HandleWrongRequest(QByteArray &wrong_msg) = 0;
 protected:
     virtual SerialService * get_serial_service() = 0;
 };

@@ -26,11 +26,13 @@ public:
 
     virtual void CheckStatus();
 
-    virtual void GetID(qint8 &id) = 0;
+    virtual qint8 GetID(qint8 &id) = 0;
 
     virtual QByteArray GetSensorInfo() = 0;
 
     virtual void set_time_cycle(int &timecycle);
+
+    virtual void HandleWrongRequest(QByteArray &wrong_msg);
 signals:
 
     
@@ -39,6 +41,8 @@ public slots:
 protected:
     virtual SerialService *get_serial_service();
     virtual SocketClass *get_socket_service();
+
+    virtual
 
     unsigned char Varify (unsigned char  *date, unsigned short len);
 private:
