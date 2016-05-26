@@ -16,7 +16,7 @@ void Moudle::HandleSerialMsg(const QByteArray &)
         qint8  id;
         GetID(id);
         coor_->EmitStatus(id, true);
-        qDebug() << id;
+        //qDebug() << id;
     }
 }
 
@@ -83,3 +83,4 @@ void Moudle::HandleWrongRequest(QByteArray &wrong_msg)
 {
     socket_serivce_->WriteToSocket(wrong_msg);
 }
+

@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     ultrasonicandpwm.cpp \
     login.cpp \
     WidgetKeyboard.cpp \
-    curtain.cpp
+    curtain.cpp \
+    detectusb.cpp
 
 HEADERS  += mainwindow.h \
     posix_qextserialport.h \
@@ -53,7 +54,8 @@ HEADERS  += mainwindow.h \
     ultrasonicandpwm.h \
     login.h \
     WidgetKeyboard.hpp \
-    curtain.h
+    curtain.h \
+    detectusb.h
 
 FORMS    += mainwindow.ui \
     WidgetKeyboard.ui \

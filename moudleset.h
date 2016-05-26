@@ -8,6 +8,7 @@
 #include <serialservice.h>
 #include <socketclass.h>
 #include <coorimpl.h>
+#include "detectusb.h"
 
 #define READTIME 100
 class MoudleSet : public QObject
@@ -30,6 +31,8 @@ private slots:
 private:
     void CheckMoudleStatus();
 
+    void HandleUsb();
+
 private:
     QTimer *read_timer_;//周期性读取串口的缓冲区,并检查节点状态
     SerialService *my_serial_service_;
@@ -39,7 +42,9 @@ private:
     AbstractMoudle *air_moudle_;
     AbstractMoudle *smoke_moudle_;
     AbstractMoudle *ultra_pwm_moudle_;
+    AbstractMoudle *curtain_moudle_;
     CoorImpl *coor_;
+    DetectUsb *detectUsb;
 
     QHash<qint8, bool> moudle_status_;
 };

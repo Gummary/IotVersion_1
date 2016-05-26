@@ -6,6 +6,7 @@
 #include "smoke.h"
 #include "serialclass.h"
 #include "ultrasonicandpwm.h"
+#include "curtain.h"
 
 MoudleSet::MoudleSet()
 {
@@ -34,12 +35,14 @@ void MoudleSet::InitMoudle()
     air_moudle_         = new AirIrDA();
     smoke_moudle_       = new Smoke();
     ultra_pwm_moudle_   = new UltrasonicAndPwm();
+    curtain_moudle_     = new Curtain();
     moudle_hash_.insert(0x0a, replay_moudle_);
     moudle_hash_.insert(0x02, temp_moudle_);
     moudle_hash_.insert(0x0f, air_moudle_);
     moudle_hash_.insert(0x04, smoke_moudle_);
     moudle_hash_.insert(0x09, ultra_pwm_moudle_);
     moudle_hash_.insert(0x08, ultra_pwm_moudle_);
+    moudle_hash_.insert(0x10, curtain_moudle_);
 
     QHash<qint8, AbstractMoudle*>::const_iterator it = moudle_hash_.constBegin();
     while(it!=moudle_hash_.constEnd())
@@ -55,6 +58,9 @@ void MoudleSet::InitMoudle()
         temp->GetID(id);
         moudle_status_.insert(id, false);
     }
+
+    detectUsb = new DetectUsb();
+
 
     //初始化串口定时器
     read_timer_ = new QTimer();
@@ -89,6 +95,20 @@ void MoudleSet::ReadSocket(QByteArray byte, qint64 length)
     qDebug() << "Receive Form Server : " << byte.toHex();
     char *b = byte.data();
     qint8 node = b[0];
+    if(node == 0x20)
+    {
+        QString p;
+        for(int i = 1;i<byte.size();i++)
+        {
+            p.append(QChar(byte[i]));
+        }
+        QString entry = detectUsb->GetDir(p);
+        qDebug() << entry;
+        my_socket_service_->WriteToSocket(entry.toAscii());
+        return;
+    }
+
+
     AbstractMoudle *moudle = moudle_hash_[node];
     if(moudle_status_.value(node, false))
     {
@@ -130,4 +150,9 @@ void MoudleSet::CheckMoudleStatus()
         temp->CheckStatus();
         it++;
     }
+}
+
+void MoudleSet::HandleUsb()
+{
+
 }

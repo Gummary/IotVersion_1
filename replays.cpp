@@ -162,7 +162,8 @@ void Replays::ConfirmOpen()
         {
             if(replays_status_[i] != pre_status_[i])
             {
-                QByteArray wmsg("\x0a");
+                QString s("0/4/");
+                QByteArray wmsg = s.toAscii() + QByteArray("\x0a");
                 wmsg.append('1'+i);
                 wmsg.append("\x00");
                 Moudle::HandleWrongRequest(wmsg);
