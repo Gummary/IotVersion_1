@@ -33,7 +33,8 @@ SOURCES += main.cpp\
     curtain.cpp \
     detectusb.cpp \
     httpreply.cpp \
-    download.cpp
+    download.cpp \
+    security.cpp
 
 HEADERS  += mainwindow.h \
     posix_qextserialport.h \
@@ -59,7 +60,8 @@ HEADERS  += mainwindow.h \
     curtain.h \
     detectusb.h \
     httpreply.h \
-    download.h
+    download.h \
+    security.h
 
 FORMS    += mainwindow.ui \
     WidgetKeyboard.ui \
