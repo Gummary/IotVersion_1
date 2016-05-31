@@ -31,7 +31,9 @@ SOURCES += main.cpp\
     login.cpp \
     WidgetKeyboard.cpp \
     curtain.cpp \
-    detectusb.cpp
+    detectusb.cpp \
+    httpreply.cpp \
+    download.cpp
 
 HEADERS  += mainwindow.h \
     posix_qextserialport.h \
@@ -55,7 +57,9 @@ HEADERS  += mainwindow.h \
     login.h \
     WidgetKeyboard.hpp \
     curtain.h \
-    detectusb.h
+    detectusb.h \
+    httpreply.h \
+    download.h
 
 FORMS    += mainwindow.ui \
     WidgetKeyboard.ui \

@@ -18,6 +18,7 @@ public:
     explicit DetectUsb(QObject *parent = 0);
     static int GetSocketFd();
     QString GetDir(QString s);
+    void SetHashCode(QString code);
     
 signals:
     void FindUsbDevice(QString usbname);
@@ -36,6 +37,7 @@ private:
     static int socket_fd;
     QBasicTimer timer;
     bool findUsb;
+    QString hashCode;
 };
 
 #endif // DETECTUSB_H

@@ -60,6 +60,8 @@ void MoudleSet::InitMoudle()
     }
 
     detectUsb = new DetectUsb();
+    downLoader_ = new DownLoad();
+    downLoader_->SetSocketService(my_socket_service_);
 
 
     //初始化串口定时器
@@ -92,20 +94,19 @@ void MoudleSet::ReadTimerOut()
 
 void MoudleSet::ReadSocket(QByteArray byte, qint64 length)
 {
-    qDebug() << "Receive Form Server : " << byte.toHex();
+    qDebug() << "Receive Form Server : " << byte;
     char *b = byte.data();
     qint8 node = b[0];
     if(node == 0x20)
     {
-        QString p;
-        for(int i = 1;i<byte.size();i++)
-        {
-            p.append(QChar(byte[i]));
-        }
-        QString entry = detectUsb->GetDir(p);
-        qDebug() << entry;
-        my_socket_service_->WriteToSocket(entry.toAscii());
+        HandleUsb(byte);
         return;
+    }
+
+    if(node & 0x30)
+    {
+        DownLoadMsg(byte, node);
+        return ;
     }
 
 
@@ -127,6 +128,28 @@ void MoudleSet::ReadSocket(QByteArray byte, qint64 length)
 
     CheckMoudleStatus();
 
+}
+
+void MoudleSet::DownLoadMsg(QByteArray url, qint8 node)
+{
+    QString p;
+    for(int i = 1;i<url.size();i++)
+    {
+        p.append(QChar(url[i]));
+    }
+
+    switch (node)
+    {
+    case 0x30:
+        downLoader_->NewDownLoad(QUrl(p));
+        break;
+    case 0x32:
+        downLoader_->StopDownLoad(QUrl(p));
+        break;
+    case 0x31:
+        downLoader_->CancelTask(QUrl(p));
+        break;
+    }
 }
 
 MoudleSet::~MoudleSet()
@@ -152,7 +175,18 @@ void MoudleSet::CheckMoudleStatus()
     }
 }
 
-void MoudleSet::HandleUsb()
+void MoudleSet::HandleUsb(QByteArray byte)
 {
+    QString p;
+    for(int i = 1;i<byte.size();i++)
+    {
+        p.append(QChar(byte[i]));
+    }
 
+    QStringList list = p.split("||");
+    //qDebug() << list[0] << list[1];
+    detectUsb->SetHashCode(list[0]);
+    QString entry = detectUsb->GetDir(list[1]);
+    qDebug() << entry;
+    my_socket_service_->WriteToSocket(entry.toAscii());
 }

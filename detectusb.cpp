@@ -108,20 +108,22 @@ void DetectUsb::UnMountUsb(QString name)
 QString DetectUsb::GetDir(QString s)
 {
     if(!findUsb)
-        return QString("0/1/2||");
+        return QString("0/1/") +hashCode + QString("/2||");
 
     QFileInfo file(s);
     if(!file.isDir())
     {
+        qDebug() << "Open MV" << s;
         //QProcess *p = new QProcess;
         //p->start();
-        return QString("0/1/1");
+        return QString("0/1/") +hashCode + QString("/1||");
     }
-    else return "0/1/2||" + ReadDir(s);
+    else return QString("0/1/") +hashCode + QString("/2||") + ReadDir(s);
 }
 
 QString DetectUsb::ReadDir(QString path)
 {
+    qDebug() << "Open Dir" << path;
     QString filename = "";
     QString dirname = "";
     QDir dir(path);
@@ -130,6 +132,7 @@ QString DetectUsb::ReadDir(QString path)
     for(int i = 0;i<fileInfo->count();i++)
     {
         QString name = fileInfo->at(i).fileName();
+        qDebug() << " File name: "<< name;
         if(fileInfo->at(i).isDir())
         {
             if(name == QString("..") || name == QString(".")) continue;
@@ -145,4 +148,9 @@ QString DetectUsb::ReadDir(QString path)
     QString p = dirname + "||" + filename;
     qDebug() << p;
     return p;
+}
+
+void DetectUsb::SetHashCode(QString code)
+{
+    hashCode = code;
 }
