@@ -143,9 +143,10 @@ void Replays::SendMsg(qint8 &cmd, qint8 &content)//发送消息
     msg_[6] = var;
     WriteToSerial(msg_);
 
+    WriteToSerial(msg_);
 
-    confirm_counter_ = 0;
-    confirm_timer_->start(500);
+    //confirm_counter_ = 0;
+    //confirm_timer_->start(500);
 }
 
 QByteArray Replays::GetSensorInfo()
@@ -206,4 +207,5 @@ void Replays::ConfirmOpen()
 void Replays::HandleSocketMsg(qint8 &cmd, qint8 &content)
 {
     SendMsg(cmd, content);
+    qDebug() << cmd << content << "===";
 }

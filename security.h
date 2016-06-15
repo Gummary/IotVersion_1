@@ -19,7 +19,7 @@ public:
 
 private:
     enum{OPEN, CLOSE}status;
-    bool havePeople;
+    bool people_status;
 };
 
 #endif // SECURITY_H

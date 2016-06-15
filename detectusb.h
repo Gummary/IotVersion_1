@@ -9,6 +9,7 @@
 #include <QProcess>
 #include <QByteArray>
 #include <QDir>
+#include "socketclass.h"
 #define UEVENT_BUFFER_SIZE 2048
 
 class DetectUsb : public QObject
@@ -19,7 +20,14 @@ public:
     static int GetSocketFd();
     QString GetDir(QString s);
     void SetHashCode(QString code);
+
+    bool isMounting() {return findUsb;}
+
+    void PlayVideo(QString path);
+
+    void SetSocketService(SocketClass* service);
     
+    void CancelPlay();
 signals:
     void FindUsbDevice(QString usbname);
     void RemoveUsbDevice(QString usbname);
@@ -33,11 +41,15 @@ private:
     void MountUsb(QString name);
     void UnMountUsb(QString name);
 
+    void SendToServer(QString content);
+
 private:
     static int socket_fd;
     QBasicTimer timer;
     bool findUsb;
     QString hashCode;
+    SocketClass *socketservice_;
+    bool isPlay_;
 };
 
 #endif // DETECTUSB_H

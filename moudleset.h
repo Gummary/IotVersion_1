@@ -33,7 +33,7 @@ private slots:
 private:
     void CheckMoudleStatus();
 
-    void HandleUsb(QByteArray byte);
+    void HandleUsb(QByteArray byte, qint8 node);
 
     void DownLoadMsg(QByteArray url, qint8 node);
 
@@ -47,6 +47,7 @@ private:
     AbstractMoudle *smoke_moudle_;
     AbstractMoudle *ultra_pwm_moudle_;
     AbstractMoudle *curtain_moudle_;
+    AbstractMoudle *security_moudle_;
     CoorImpl *coor_;
     DetectUsb *detectUsb;
     DownLoad *downLoader_;

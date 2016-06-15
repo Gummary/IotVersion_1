@@ -14,6 +14,7 @@ DetectUsb::DetectUsb(QObject *parent) :
     initSocketFd();
     findUsb = false;
     if(GetSocketFd() != -1) timer.start(100, this);
+    isPlay_ = false;
 }
 
 int DetectUsb::socket_fd(0);
@@ -109,21 +110,18 @@ QString DetectUsb::GetDir(QString s)
 {
     if(!findUsb)
         return QString("0/1/") +hashCode + QString("/2||");
-
-    QFileInfo file(s);
-    if(!file.isDir())
+    else
     {
-        qDebug() << "Open MV" << s;
-        //QProcess *p = new QProcess;
-        //p->start();
-        return QString("0/1/") +hashCode + QString("/1||");
+        QString str = QString("2||") + ReadDir(s);
+        SendToServer(str);
     }
-    else return QString("0/1/") +hashCode + QString("/2||") + ReadDir(s);
+
+        return NULL;
 }
 
 QString DetectUsb::ReadDir(QString path)
 {
-    qDebug() << "Open Dir" << path;
+    qDebug() << "Open Dir : " << path;
     QString filename = "";
     QString dirname = "";
     QDir dir(path);
@@ -153,4 +151,44 @@ QString DetectUsb::ReadDir(QString path)
 void DetectUsb::SetHashCode(QString code)
 {
     hashCode = code;
+}
+
+void DetectUsb::PlayVideo(QString path)
+{
+    if(!findUsb)
+        SendToServer(QString("0"));
+
+    QFileInfo file(path);
+    if(!file.isDir())
+    {
+        QProcess *p = new QProcess;
+        QStringList arg;
+        arg << file.absoluteFilePath();
+        p->start("mplayer", arg);
+        SendToServer(QString("1"));
+    }
+    else
+    {
+        SendToServer(QString("0"));
+    }
+}
+
+void DetectUsb::SendToServer(QString content)
+{
+    QString msg = QString("0/1/") + hashCode + QString("/") + content;
+    if(socketservice_)
+    {
+        socketservice_->WriteToSocket(msg.toAscii());
+    }
+}
+
+void DetectUsb::CancelPlay()
+{
+    QProcess::execute("killall mplayer");
+
+}
+
+void DetectUsb::SetSocketService(SocketClass *service)
+{
+    this->socketservice_ = service;
 }

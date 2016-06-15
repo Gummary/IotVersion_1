@@ -21,10 +21,11 @@ void Security::HandleSerialMsg(const QByteArray &byte)
 {
     Moudle::HandleSerialMsg(byte);
 
-    people_status = byte[5]?true:false;
+    people_status = byte[5] == 0x01?true:false;
 
-    if(status == OPEN)
+    if(status == OPEN&&people_status)
     {
+        qDebug() << "People coming in";
         SocketClass *service = SocketClass::GetSocket();
         service->WriteToSocket(GetSensorInfo());
     }
@@ -37,11 +38,6 @@ void Security::HandleSocketMsg(qint8 &, qint8 &content)
 
 QByteArray Security::GetSensorInfo()
 {
-    QString msg;
-    msg = "0/5/";
-    if(people_status)   msg+="1";
-    else    msg +="0";
-
-    return msg.toAscii();
+    return QString("0/4/3").toAscii();
 
 }

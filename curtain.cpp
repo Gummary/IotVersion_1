@@ -48,5 +48,6 @@ void Curtain::SendMsg(qint8 &, qint8 &content)
     str = msg_.data();
     var = Moudle::Varify((unsigned char *)str, 6);
     msg_[6] = var;
+    qDebug() << "Curtain : " << msg_;
     WriteToSerial(msg_);
 }

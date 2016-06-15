@@ -26,7 +26,7 @@ int HttpReply::DownLoad()
     QString tempName = QString("%1.tmp")
             .arg(QDateTime::currentDateTime()
                  .toString("yyyy-MM-dd-hh-mm-ss-zzz"));
-    fileName_ = QString("/home/SKZH/download/") + tempName;
+    fileName_ = QString("/usb/") + tempName;
     if(status_ == ABORT)
     {
         qDebug() << "Abort";
@@ -127,8 +127,10 @@ void HttpReply::Finish()
     }
     else
     {
+        QFileInfo fileinfo(url_.path());
         file_->flush();
         file_->close();
+        file_->rename(fileinfo.fileName());
         delete file_;
         reply_->deleteLater();
         emit Finish(url_.toString());
@@ -155,6 +157,7 @@ int HttpReply::StopDownLoad()
 
 int HttpReply::CancelDownLoad()
 {
+    if(status_ == CANCEL) return (0);
     if(status_ == NODOWNLOAD)
     {
         return DOWNNOTSTART;

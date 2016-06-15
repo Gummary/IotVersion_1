@@ -7,6 +7,7 @@
 #include "serialclass.h"
 #include "ultrasonicandpwm.h"
 #include "curtain.h"
+#include "security.h"
 
 MoudleSet::MoudleSet()
 {
@@ -36,6 +37,8 @@ void MoudleSet::InitMoudle()
     smoke_moudle_       = new Smoke();
     ultra_pwm_moudle_   = new UltrasonicAndPwm();
     curtain_moudle_     = new Curtain();
+    security_moudle_    = new Security();
+
     moudle_hash_.insert(0x0a, replay_moudle_);
     moudle_hash_.insert(0x02, temp_moudle_);
     moudle_hash_.insert(0x0f, air_moudle_);
@@ -43,6 +46,7 @@ void MoudleSet::InitMoudle()
     moudle_hash_.insert(0x09, ultra_pwm_moudle_);
     moudle_hash_.insert(0x08, ultra_pwm_moudle_);
     moudle_hash_.insert(0x10, curtain_moudle_);
+    moudle_hash_.insert(0x05, security_moudle_);
 
     QHash<qint8, AbstractMoudle*>::const_iterator it = moudle_hash_.constBegin();
     while(it!=moudle_hash_.constEnd())
@@ -61,6 +65,7 @@ void MoudleSet::InitMoudle()
 
     detectUsb = new DetectUsb();
     downLoader_ = new DownLoad();
+    detectUsb->SetSocketService(my_socket_service_);
     downLoader_->SetSocketService(my_socket_service_);
 
 
@@ -83,8 +88,10 @@ void MoudleSet::ReadTimerOut()
     qint64 length_ = my_serial_service_->ReadFromSerial(byte);
     if(byte.isEmpty()) return;
     qint8 node = byte[3];
+    qDebug() << "Node ID : " << node;
     AbstractMoudle* temp = moudle_hash_.value(node, NULL);
     if(temp!=NULL) temp->HandleSerialMsg(byte);
+    else qDebug() << "Error Occur : Node is " << node;
 
 }
 
@@ -94,16 +101,17 @@ void MoudleSet::ReadTimerOut()
 
 void MoudleSet::ReadSocket(QByteArray byte, qint64 length)
 {
-    qDebug() << "Receive Form Server : " << byte;
+    qDebug() << "Receive Form Server : " << byte.toHex();
     char *b = byte.data();
     qint8 node = b[0];
-    if(node == 0x20)
+    if(node >= 0x20 && node <=0x22)
     {
-        HandleUsb(byte);
+
+        HandleUsb(byte, node);
         return;
     }
 
-    if(node & 0x30)
+    if(node >= 0x30 && node <= 0x32)
     {
         DownLoadMsg(byte, node);
         return ;
@@ -113,17 +121,16 @@ void MoudleSet::ReadSocket(QByteArray byte, qint64 length)
     AbstractMoudle *moudle = moudle_hash_[node];
     if(moudle_status_.value(node, false))
     {
-        //qDebug()<< "Read from Socket : " << byte.toHex();
         qint8 m1 = b[1];
         qint8 m2 = b[2];
         moudle->HandleSocketMsg(m1, m2);
         qint8 id;
         moudle->GetID(id);
-        //qDebug() << "Moudle ID" <<id;
+        qDebug() << "Moudle ID" <<id;
     }
     else
     {
-
+        qDebug() << "Moudle not connected";
     }
 
     CheckMoudleStatus();
@@ -175,7 +182,7 @@ void MoudleSet::CheckMoudleStatus()
     }
 }
 
-void MoudleSet::HandleUsb(QByteArray byte)
+void MoudleSet::HandleUsb(QByteArray byte, qint8 node)
 {
     QString p;
     for(int i = 1;i<byte.size();i++)
@@ -184,9 +191,23 @@ void MoudleSet::HandleUsb(QByteArray byte)
     }
 
     QStringList list = p.split("||");
-    //qDebug() << list[0] << list[1];
+    qDebug() << list;
     detectUsb->SetHashCode(list[0]);
-    QString entry = detectUsb->GetDir(list[1]);
-    qDebug() << entry;
-    my_socket_service_->WriteToSocket(entry.toAscii());
+
+    switch (node)
+    {
+    case 0x20:
+        detectUsb->GetDir(list[1]);
+        break;
+    case 0x21:
+        detectUsb->PlayVideo(list[1]);
+        break;
+    case 0x22:
+        detectUsb->CancelPlay();
+        break;
+    }
+
+    //QString entry = detectUsb->GetDir(list[1]);
+    //qDebug() << entry;
+    //my_socket_service_->WriteToSocket(entry.toAscii());
 }

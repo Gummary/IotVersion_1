@@ -58,6 +58,9 @@ void DownLoad::Finish(QString url)
     downloadSet.remove(url);
     usedTime_.remove(url);
     delete reply;
+
+    QString msg = QString("0/5/") + url;
+    if(service) service->WriteToSocket(msg.toAscii());
 }
 
 void DownLoad::UpdateProcess(QString url, qint64 recesize, qint64 totalsize, int usedTime)
@@ -92,7 +95,6 @@ void DownLoad::UpdateProcess(QString url, qint64 recesize, qint64 totalsize, int
         qDebug() << msg;
         if(service)
         service->WriteToSocket(msg.toAscii());
-
         timer=0;
     }
 
