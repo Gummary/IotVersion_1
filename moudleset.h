@@ -18,7 +18,10 @@ class MoudleSet : public QObject
 public:
     MoudleSet();
     ~MoudleSet();
+
     void InitMoudle();
+
+    void SetSocketService(SocketClass *);
 
      QHash<qint8, AbstractMoudle*> moudle_hash_;
 
@@ -48,6 +51,7 @@ private:
     AbstractMoudle *ultra_pwm_moudle_;
     AbstractMoudle *curtain_moudle_;
     AbstractMoudle *security_moudle_;
+    AbstractMoudle *rfidlock_moudle_;
     CoorImpl *coor_;
     DetectUsb *detectUsb;
     DownLoad *downLoader_;

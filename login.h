@@ -3,7 +3,9 @@
 
 #include <QWidget>
 #include <QDebug>
-#include "WidgetKeyboard.hpp"
+#include <QMessageBox>
+#include "key.h"
+#include "socketclass.h"
 
 
 namespace Ui {
@@ -17,17 +19,27 @@ class Login : public QWidget
 public:
     explicit Login(QWidget *parent = 0);
     ~Login();
+
+    SocketClass* GetSocketService();
+
 protected:
     bool eventFilter(QObject *, QEvent *);
+
+signals:
+    void closeLoginWidget();
 
 private slots:
     void on_Login_Btn_clicked();
 
-    void on_UserName_Edit_textEdited(const QString &arg1);
+    void ReadFromServer(QByteArray,qint64);
 
 private:
     Ui::Login *ui;
-    WidgetKeyboard *keyboard;
+
+    SocketClass *socket_service;
 };
+
+
+extern CKey *keyboard;
 
 #endif // LOGIN_H

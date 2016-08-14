@@ -8,10 +8,15 @@
 #include "ultrasonicandpwm.h"
 #include "curtain.h"
 #include "security.h"
+#include "rfidlock.h"
 
 MoudleSet::MoudleSet()
 {
-    InitMoudle();
+}
+
+void MoudleSet::SetSocketService(SocketClass *service)
+{
+    this->my_socket_service_ = service;
 }
 
 void MoudleSet::InitMoudle()
@@ -21,9 +26,6 @@ void MoudleSet::InitMoudle()
     my_serial_service_->CloseCom();
     my_serial_service_->OpenCom();
 
-    my_socket_service_ = SocketClass::GetSocket();
-    my_socket_service_->CloseSocket();
-    bool state = my_socket_service_->OpenSocket();
     connect(my_socket_service_,SIGNAL(SocketMsg(QByteArray,qint64)), this, SLOT(ReadSocket(QByteArray,qint64)));
 
     coor_ = new CoorImpl();
@@ -38,6 +40,7 @@ void MoudleSet::InitMoudle()
     ultra_pwm_moudle_   = new UltrasonicAndPwm();
     curtain_moudle_     = new Curtain();
     security_moudle_    = new Security();
+    rfidlock_moudle_    = new RFIDLock();
 
     moudle_hash_.insert(0x0a, replay_moudle_);
     moudle_hash_.insert(0x02, temp_moudle_);
@@ -47,6 +50,7 @@ void MoudleSet::InitMoudle()
     moudle_hash_.insert(0x08, ultra_pwm_moudle_);
     moudle_hash_.insert(0x10, curtain_moudle_);
     moudle_hash_.insert(0x05, security_moudle_);
+    moudle_hash_.insert(0x15, rfidlock_moudle_);
 
     QHash<qint8, AbstractMoudle*>::const_iterator it = moudle_hash_.constBegin();
     while(it!=moudle_hash_.constEnd())

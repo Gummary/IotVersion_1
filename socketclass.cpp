@@ -51,7 +51,6 @@ bool SocketClass::OpenSocket()
         socket_state_ = OPEN;
         connect(my_socket_, SIGNAL(readyRead()), this, SLOT(ReadFromSocket()));
         qDebug()<<"Socket connect success";
-        my_socket_->write("0/0/");
         return true;
     }
     else
@@ -83,6 +82,7 @@ void SocketClass::ReleaseSocket()
 {
     if(my_socket_)
     {
+        my_socket_->disconnectFromHost();
         delete my_socket_;
     }
     my_socket_ = 0;

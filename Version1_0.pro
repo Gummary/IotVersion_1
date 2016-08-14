@@ -29,12 +29,14 @@ SOURCES += main.cpp\
     coorimpl.cpp \
     ultrasonicandpwm.cpp \
     login.cpp \
-    WidgetKeyboard.cpp \
     curtain.cpp \
     detectusb.cpp \
     httpreply.cpp \
     download.cpp \
-    security.cpp
+    security.cpp \
+    wifiset.cpp \
+    key.cpp \
+    rfidlock.cpp
 
 HEADERS  += mainwindow.h \
     posix_qextserialport.h \
@@ -56,17 +58,23 @@ HEADERS  += mainwindow.h \
     coorimpl.h \
     ultrasonicandpwm.h \
     login.h \
-    WidgetKeyboard.hpp \
     curtain.h \
     detectusb.h \
     httpreply.h \
     download.h \
-    security.h
+    security.h \
+    wifiset.h \
+    key.h \
+    rfidlock.h
 
 FORMS    += mainwindow.ui \
     WidgetKeyboard.ui \
-    login.ui
+    login.ui \
+    wifiset.ui
 
 unix:DEFINES           += _TTY_POSIX_
 
 OTHER_FILES +=
+
+RESOURCES += \
+    icon.qrc

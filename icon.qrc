@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/icon/wifi">
+        <file alias="wifiicon">wifiicon.png</file>
+        <file alias="lv4">4.png</file>
+        <file alias="lv3">3.png</file>
+        <file alias="lv2">2.png</file>
+        <file alias="lv1">1.png</file>
+    </qresource>
+    <qresource prefix="/image/button">
+        <file alias="keyboard1.png">res/image/keyboard1.png</file>
+        <file alias="keyboard.png">res/image/keyboard.png</file>
+        <file alias="hoverbutton4.png">res/image/hoverbutton4.png</file>
+        <file alias="hoverbutton3.png">res/image/hoverbutton3.png</file>
+        <file alias="hoverbutton2.png">res/image/hoverbutton2.png</file>
+        <file alias="hoverbutton1.png">res/image/hoverbutton1.png</file>
+        <file alias="button4.png">res/image/button4.png</file>
+        <file alias="button3.png">res/image/button3.png</file>
+        <file alias="button2.png">res/image/button2.png</file>
+        <file alias="button1.png">res/image/button1.png</file>
+    </qresource>
+    <qresource prefix="/image/background">
+        <file alias="login">res/image/loginbackground.png</file>
+    </qresource>
+</RCC>

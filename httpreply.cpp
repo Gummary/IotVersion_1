@@ -43,7 +43,7 @@ int HttpReply::DownLoad()
         //qDebug() << tempName;
         if(!file_->open(QIODevice::WriteOnly))
         {
-            qDebug() << "Open Failed";
+            qDebug() << "Open Failed:"<<fileName_;
             delete file_;
             file_ = NULL;
             return OPENFILEFAILED;

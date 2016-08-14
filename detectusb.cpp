@@ -185,6 +185,7 @@ void DetectUsb::SendToServer(QString content)
 void DetectUsb::CancelPlay()
 {
     QProcess::execute("killall mplayer");
+    SendToServer(QString("3"));
 
 }
 

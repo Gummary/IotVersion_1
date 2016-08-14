@@ -17,9 +17,9 @@
    <widget class="QWidget" name="ClockWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>560</x>
-      <y>210</y>
-      <width>291</width>
+      <x>10</x>
+      <y>30</y>
+      <width>371</width>
       <height>181</height>
      </rect>
     </property>
@@ -27,55 +27,64 @@
    <widget class="QCalendarWidget" name="calendarWidget">
     <property name="geometry">
      <rect>
-      <x>560</x>
-      <y>10</y>
-      <width>291</width>
-      <height>191</height>
+      <x>10</x>
+      <y>230</y>
+      <width>371</width>
+      <height>231</height>
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="OPEN">
+   <widget class="QPushButton" name="wifibtn">
     <property name="geometry">
      <rect>
-      <x>620</x>
-      <y>440</y>
-      <width>92</width>
-      <height>27</height>
+      <x>711</x>
+      <y>0</y>
+      <width>71</width>
+      <height>71</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+    </property>
     <property name="text">
-     <string>OPEN</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="icon.qrc">
+      <normaloff>:/icon/wifi/wifiicon</normaloff>:/icon/wifi/wifiicon</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>71</width>
+      <height>71</height>
+     </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="CLOSE">
+   <widget class="QWidget" name="wifisetpanel" native="true">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>400</y>
-      <width>92</width>
-      <height>27</height>
+      <x>640</x>
+      <y>80</y>
+      <width>141</width>
+      <height>331</height>
      </rect>
-    </property>
-    <property name="text">
-     <string>Close</string>
     </property>
    </widget>
-   <widget class="QLabel" name="labelvideo">
+   <widget class="QWidget" name="loginpanel" native="true">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>511</width>
-      <height>431</height>
+      <x>0</x>
+      <y>0</y>
+      <width>781</width>
+      <height>471</height>
      </rect>
-    </property>
-    <property name="text">
-     <string>Video</string>
     </property>
    </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="icon.qrc"/>
+ </resources>
  <connections/>
 </ui>

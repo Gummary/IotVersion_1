@@ -11,52 +11,65 @@ MainWindow::MainWindow(QWidget *parent) :
     c = new Clock(ui->ClockWidget);
     c->show();
 
-    this->showFullScreen();
+    //this->showFullScreen();
+
 
     moudle_set_ = new MoudleSet();
 
+    this->wifi_ = new wifiset(ui->wifisetpanel);
+    this->login_ = new Login(ui->loginpanel);
 
-    //InitCamera();
+    this->login_->setAutoFillBackground(true);
+
+    QPalette palette;
+    palette.setBrush(QPalette::Background,QBrush(QPixmap(":/image/background/login")));
+    this->login_->setPalette(palette);
+
+    ui->wifisetpanel->hide();
+    ui->loginpanel->show();
+
+    connect(this->login_,SIGNAL(closeLoginWidget()),this,SLOT(on_Close_Login_Widget()));
+
 }
 
 MainWindow::~MainWindow()
 {
 
-    deviceUninit();
+//    deviceUninit();
     delete ui;
 }
 
 void MainWindow::InitCamera()
 {
-    pic_write_ = false;
-    camera_start_ = false;
-    camera_timer_ = new QTimer();
-    connect(camera_timer_,SIGNAL(timeout()), this, SLOT(UpdateCamera()));
-    deviceOpen();
-    deviceInit();
+//    pic_write_ = false;
+//    camera_start_ = false;
+//    camera_timer_ = new QTimer();
+//    connect(camera_timer_,SIGNAL(timeout()), this, SLOT(UpdateCamera()));
+//    deviceOpen();
+//    deviceInit();
 }
 
 void MainWindow::UpdateCamera()
 {
-    unsigned char image_buf[1536000+54];
+//    unsigned char image_buf[1536000+54];
 
-    frameRead(image_buf);
-    //qDebug()<<"image_buf"<<*image_buf<<endl;
-    SendPicture(image_buf);
-    this->qimage_ = QImage::fromData(image_buf,800*480*4+54,NULL);
+//    frameRead(image_buf);
+//    //qDebug()<<"image_buf"<<*image_buf<<endl;
+//    SendPicture(image_buf);
+//    this->qimage_ = QImage::fromData(image_buf,800*480*4+54,NULL);
 
 
-    pixmap_ = QPixmap::fromImage(this->qimage_, 0);
-    ui->labelvideo->setPixmap(this->pixmap_);
+//    pixmap_ = QPixmap::fromImage(this->qimage_, 0);
+//    ui->labelvideo->setPixmap(this->pixmap_);
 
-    if (pic_write_)
-    {
-        FILE* bmp_f = fopen("a.bmp", "w+");
-        fwrite(image_buf, 1, 800*480*4+54, bmp_f);  //debug by liaoxp 2013-11-28
-        fclose(bmp_f);
-        pic_write_ = false;
-        qDebug()<<"take photoshop............................."<<endl;
-    }
+//    if (pic_write_)
+//    {
+//        FILE* bmp_f = fopen("a.bmp", "w+");
+//        fwrite(image_buf, 1, 800*480*4+54, bmp_f);  //debug by liaoxp 2013-11-28
+//        fclose(bmp_f);
+//        pic_write_ = false;
+//        qDebug()<<"take photoshop............................."<<endl;
+//    }
 }
 
 
@@ -110,4 +123,18 @@ void MainWindow::SendPicture(unsigned char *pic)
     const char* status = out.c_str();
     my_socket_service_->WriteToSocket(QByteArray((char *)status));
     */
+}
+
+void MainWindow::on_wifibtn_clicked()
+{
+    if(ui->wifisetpanel->isHidden()) ui->wifisetpanel->show();
+    else ui->wifisetpanel->hide();
+}
+
+
+void MainWindow::on_Close_Login_Widget()
+{
+    ui->loginpanel->close();
+    moudle_set_->SetSocketService(login_->GetSocketService());
+    moudle_set_->InitMoudle();
 }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>wifiset</class>
+ <widget class="QWidget" name="wifiset">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>141</width>
+    <height>331</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QPushButton" name="openwifi">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>141</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>打开wifi</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="closewifi">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>30</y>
+     <width>141</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>关闭wifi</string>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="wifilist">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>60</y>
+     <width>121</width>
+     <height>161</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="connectwifi">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>280</y>
+     <width>141</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>连接wifi</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="wifipwd">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>250</y>
+     <width>141</width>
+     <height>27</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>230</y>
+     <width>81</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>输入密码：</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
