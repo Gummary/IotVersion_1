@@ -52,6 +52,7 @@ private:
     AbstractMoudle *curtain_moudle_;
     AbstractMoudle *security_moudle_;
     AbstractMoudle *rfidlock_moudle_;
+    AbstractMoudle *touch_moudle_;
     CoorImpl *coor_;
     DetectUsb *detectUsb;
     DownLoad *downLoader_;

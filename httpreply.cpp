@@ -130,7 +130,10 @@ void HttpReply::Finish()
         QFileInfo fileinfo(url_.path());
         file_->flush();
         file_->close();
-        file_->rename(fileinfo.fileName());
+        QString newfilename = QString("/usb/")+fileinfo.fileName();
+        bool x = QFile::rename(fileName_,newfilename);
+        qDebug() << x;
+//        file_->rename(fileinfo.fileName());
         delete file_;
         reply_->deleteLater();
         emit Finish(url_.toString());

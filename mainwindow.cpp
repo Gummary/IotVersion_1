@@ -8,8 +8,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    c = new Clock(ui->ClockWidget);
-    c->show();
+//    c = new Clock(ui->ClockWidget);
+//    c->show();
 
     //this->showFullScreen();
 

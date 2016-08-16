@@ -36,7 +36,8 @@ SOURCES += main.cpp\
     security.cpp \
     wifiset.cpp \
     key.cpp \
-    rfidlock.cpp
+    rfidlock.cpp \
+    touch.cpp
 
 HEADERS  += mainwindow.h \
     posix_qextserialport.h \
@@ -65,7 +66,8 @@ HEADERS  += mainwindow.h \
     security.h \
     wifiset.h \
     key.h \
-    rfidlock.h
+    rfidlock.h \
+    touch.h
 
 FORMS    += mainwindow.ui \
     WidgetKeyboard.ui \

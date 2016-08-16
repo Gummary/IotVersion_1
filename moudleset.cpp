@@ -9,6 +9,7 @@
 #include "curtain.h"
 #include "security.h"
 #include "rfidlock.h"
+#include "touch.h"
 
 MoudleSet::MoudleSet()
 {
@@ -41,16 +42,20 @@ void MoudleSet::InitMoudle()
     curtain_moudle_     = new Curtain();
     security_moudle_    = new Security();
     rfidlock_moudle_    = new RFIDLock();
+    touch_moudle_       = new Touch();
 
-    moudle_hash_.insert(0x0a, replay_moudle_);
+
     moudle_hash_.insert(0x02, temp_moudle_);
-    moudle_hash_.insert(0x0f, air_moudle_);
     moudle_hash_.insert(0x04, smoke_moudle_);
-    moudle_hash_.insert(0x09, ultra_pwm_moudle_);
-    moudle_hash_.insert(0x08, ultra_pwm_moudle_);
-    moudle_hash_.insert(0x10, curtain_moudle_);
     moudle_hash_.insert(0x05, security_moudle_);
+    moudle_hash_.insert(0x07, touch_moudle_);
+    moudle_hash_.insert(0x08, ultra_pwm_moudle_);
+    moudle_hash_.insert(0x09, ultra_pwm_moudle_);
+    moudle_hash_.insert(0x0a, replay_moudle_);
+    moudle_hash_.insert(0x0f, air_moudle_);
+    moudle_hash_.insert(0x10, curtain_moudle_);
     moudle_hash_.insert(0x15, rfidlock_moudle_);
+
 
     QHash<qint8, AbstractMoudle*>::const_iterator it = moudle_hash_.constBegin();
     while(it!=moudle_hash_.constEnd())
@@ -134,7 +139,10 @@ void MoudleSet::ReadSocket(QByteArray byte, qint64 length)
     }
     else
     {
-        qDebug() << "Moudle not connected";
+        QByteArray msg = "0/4/4/";
+        msg+=byte;
+        qDebug() << "Moudle not connected:" << msg.toHex();
+        my_socket_service_->WriteToSocket(msg+byte);
     }
 
     CheckMoudleStatus();
