@@ -19,7 +19,12 @@ qint8 Touch::GetID(qint8 &id)
 void Touch::HandleSerialMsg(const QByteArray &byte)
 {
     Moudle::HandleSerialMsg(byte);
-    if(byte[5] == 0x01)
+    if(byte[1] != 0x07)
+    {
+        return;
+    }
+
+    if(byte[5] == 0x00)
     {
         touch_state_ = true;
         qDebug() << "Have Touch";
@@ -31,12 +36,11 @@ void Touch::HandleSerialMsg(const QByteArray &byte)
     {
         if(touch_state_)
         {
-//            return;
             qDebug() << "Touch disapper";
-//            Touch_state_ = false;
-//            QByteArray json_msg = GetSensorInfo();
-//            SocketClass* service = get_socket_service();
-//            service->WriteToSocket(json_msg);
+            touch_state_ = false;
+            QByteArray json_msg = GetSensorInfo();
+            SocketClass* service = get_socket_service();
+            service->WriteToSocket(json_msg);
         }
     }
 
@@ -50,7 +54,15 @@ void Touch::SendMsg(qint8 &, qint8 &)
 QByteArray Touch::GetSensorInfo()
 {
     QString info;
-    info+="0/6";
+    info+="0/4/";
+    if(touch_state_)
+    {
+        info+="5";
+    }
+    else
+    {
+        info+="6";
+    }
     return info.toAscii();
 }
 void Touch::HandleSocketMsg(qint8 &, qint8 &)
